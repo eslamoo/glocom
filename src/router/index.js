@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 
 // DragToWorkplace
-import DragToWorkplace from '@/views/DragToWorkplace'
+import Main from '@/views/main'
 
 
 
@@ -14,8 +14,8 @@ export default new Router({
  
     {
       path: '/',
-      name: 'DragToWorkplace',
-      component: DragToWorkplace
+      name: 'main',
+      component: Main
     },
     
   ]
