@@ -12,59 +12,59 @@
           <p>Messaging</p>
           <div class="item">
             <div class="glocom-main__aside__content__components--blue chart-item" id="call">
-              <span><i class="fas fa-envelope"></i> Send SMS</span>
+              <span><i class="fa fa-envelope"></i> Send SMS</span>
             </div>
           </div>
           <p class="mt-4">Voice</p>
           <div class="item">
             <div class="glocom-main__aside__content__components--purple chart-item">
-              <span><i class="fas fa-align-center"></i> IVR Menu</span>
+              <span><i class="fa fa-align-center"></i> IVR Menu</span>
             </div>
           </div>
           <div class="item mt-2">
             <div class="glocom-main__aside__content__components--purple chart-item">
-              <span><i class="fas fa-th"></i> Get Input</span>
+              <span><i class="fa fa-th"></i> Get Input</span>
             </div>
           </div>
           <div class="item mt-2">
             <div class="glocom-main__aside__content__components--purple chart-item">
-              <span><i class="fas fa-phone"></i> Initiat Call</span>
+              <span><i class="fa fa-phone"></i> Initiat Call</span>
             </div>
           </div>
           <div class="item mt-2">
             <div class="glocom-main__aside__content__components--purple chart-item">
-              <span><i class="fas fa-phone-square"></i> Call Forward</span>
+              <span><i class="fa fa-phone-square"></i> Call Forward</span>
             </div>
           </div> 
           <div class="item mt-2">
             <div class="glocom-main__aside__content__components--purple chart-item">
-              <span><i class="fas fa-ban"></i> Hangup</span>
+              <span><i class="fa fa-ban"></i> Hangup</span>
             </div>
           </div>
           <div class="item mt-2">
             <div class="glocom-main__aside__content__components--purple chart-item">
-              <span><i class="fas fa-microphone"></i> Record Audio</span>
+              <span><i class="fa fa-microphone"></i> Record Audio</span>
             </div>
           </div>
           <div class="item mt-2">
             <div class="glocom-main__aside__content__components--purple chart-item">
-              <span><i class="fas fa-users"></i> Multi-Party Call</span>
+              <span><i class="fa fa-users"></i> Multi-Party Call</span>
             </div>
           </div>
           <div class="item mt-2">
             <div class="glocom-main__aside__content__components--purple chart-item">
-              <span><i class="fas fa-circle"></i>Conference Bridge</span>
+              <span><i class="fa fa-circle"></i>Conference Bridge</span>
             </div>
           </div>
           <p class="mt-4">Functions</p>
           <div class="item mt-2">
             <div class="glocom-main__aside__content__components--yellow chart-item">
-              <span><i class="fas fa-compress"></i>HTTP Request</span>
+              <span><i class="fa fa-compress"></i>HTTP Request</span>
             </div>
           </div>
           <div class="item mt-2">
             <div class="glocom-main__aside__content__components--yellow chart-item">
-              <span><i class="fas fa-list-ol"></i>Counter</span>
+              <span><i class="fa fa-list-ol"></i>Counter</span>
             </div>
           </div>
         </div>
@@ -247,8 +247,8 @@ export default {
           <div id="${id}" class="start-call chart-item">
             <div class="start-call__header d-flex justify-content-between align-content-center">
             
-              <div><i class="fas fa-circle"></i> Start</div>
-              <i style="position: relative;top: 4px;" class="fas fa-times-circle "></i>
+              <div><i class="fa fa-circle"></i> Start</div>
+              <i style="position: relative;top: 4px;" class="fa fa-times-circle "></i>
             </div>
             <div class="start-call__body">
               PHLO Execution will start from this node
@@ -284,11 +284,11 @@ export default {
 };
 </script>
 <style lang="scss">
-$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
-@import "~@fortawesome/fontawesome-free/scss/fontawesome";
-@import "~@fortawesome/fontawesome-free/scss/solid"; // fas
-@import "~@fortawesome/fontawesome-free/scss/regular"; // far
-@import "~@fortawesome/fontawesome-free/scss/brands"; // fab
+// $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+// @import "~@fortawesome/fontawesome-free/scss/fontawesome";
+// @import "~@fortawesome/fontawesome-free/scss/solid"; // fa
+// @import "~@fortawesome/fontawesome-free/scss/regular"; // far
+// @import "~@fortawesome/fontawesome-free/scss/brands"; // fab
 .glocom-main{
   height: 100vh;
   &__aside{
@@ -308,7 +308,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
         }
         &--blue{
           border: 1px solid #5dbcd2;
-          display: block;
+          display: block !important;
           text-align: left;
           padding: 7px 20px;
           background-color: #fff;
@@ -319,7 +319,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
         }
         &--purple{
           border: 1px solid #b56adf;
-          display: block;
+          display: block !important;
           text-align: left;
           padding: 7px 20px;
           background-color: #fff;
@@ -330,7 +330,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
         } 
         &--yellow{
           border: 1px solid #f9c662;
-          display: block;
+          display: block !important;
           text-align: left;
           padding: 7px 20px;
           background-color: #fff;
