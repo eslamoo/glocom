@@ -111,38 +111,38 @@ export default {
         DragOptions: { cursor: "pointer", zIndex: 2000 },
         // overlays
         ConnectionOverlays: [
-          [
-            "Arrow",
-            {
-              location: 1,
-              visible: true,
-              width: 11,
-              height: 11,
-              id: "Arrow"
-            }
-          ],
-          [
-            "Label",
-            {
-              location: 0.1,
-              id: "Label",
-              cssClass: "arrow-label",
-              events: {
-                tap() {
-                  console.log("Label");
-                }
-              }
-            }
-          ]
+          // [
+          //   "Arrow",
+          //   {
+          //     location: 1,
+          //     visible: true,
+          //     width: 11,
+          //     height: 30,
+          //     id: "Arrow"
+          //   }
+          // ],
+          // [
+          //   "Label",
+          //   {
+          //     location: 2,
+          //     id: "Label",
+          //     cssClass: "arrow-label",
+          //     events: {
+          //       tap() {
+          //         console.log("Label");
+          //       }
+          //     }
+          //   }
+          // ]
         ],
         Container: "workplace"
       });
       let connectorPaintStyle = {
-        strokeWidth: 2,
+        strokeWidth: 1,
         stroke: "#111",
         joinstyle: "square",
         outlineStroke: "white",
-        outlineWidth: 2
+        outlineWidth: 1, 
       };
       let connectorHoverStyle = {
         strokeWidth: 3,
@@ -156,49 +156,55 @@ export default {
       };
       // source endpoints
       let sourceEndpoint = {
-        endpoint: "Dot",
+        endpoint: "Rectangle",
+        // anchor: [.8, 1, .1, .1],
         paintStyle: {
           stroke: "#111",
           fill: "transparent",
-          radius: 7,
-          strokeWidth: 1
+          radius: 10,
+          strokeWidth: 1,
+          
         },
+        dragOptions: { hoverClass: "hover", activeClass: "sourceAvtive" },
         // anchor:[ "Perimeter", { shape:"Square" } ],
         isSource: true,
+        // isTarget: true,
         connector: [
           "Flowchart",
           {
-            stub: [40, 60],
-            gap: 5,
-            cornerRadius: 1,
+            stub: [40, 10],
+            gap: 1,
+            cornerRadius: 5,
             alwaysRespectStubs: true
           }
         ],
         connectorStyle: connectorPaintStyle,
         hoverPaintStyle: endpointHoverStyle,
         connectorHoverStyle: connectorHoverStyle,
-        dragOptions: {},
-        overlays: [
-          [
-            "Label",
-            {
-              location: [0.5, 1.5],
-              label: "Drag",
-              cssClass: "endpointSourceLabel",
-              visible: false
-            }
-          ]
-        ]
+        
+        // overlays: [
+        //   [
+        //     "Label",
+        //     {
+        //       location: [0.5, 1.5],
+        //       label: "Drag",
+        //       cssClass: "endpointSourceLabel",
+        //       visible: true
+        //     }
+        //   ]
+        // ]
       };
       // target endpoints
       let targetEndpoint = {
         endpoint: "Dot",
+        // anchors: [[.8, 1, .1, .1], [.8, .5, .1, .1]],
         // anchor:[ "Perimeter", { shape:"Square", anchorCount:150 }],
-        paintStyle: { fill: "#111", radius: 7 },
+        paintStyle: { fill: "#111", radius: 0 },
         hoverPaintStyle: endpointHoverStyle,
-        maxConnections: -1,
+        maxConnections: 1,
         dropOptions: { hoverClass: "hover", activeClass: "active" },
         isTarget: true,
+         cssClass: "arrowdown",
         overlays: [
           [
             "Label",
@@ -206,7 +212,8 @@ export default {
               location: [0.5, -0.5],
               label: "Drop",
               cssClass: "endpointTargetLabel",
-              visible: false
+              visible: false,
+              
             }
           ]
         ]
@@ -214,7 +221,7 @@ export default {
       let init = function(connection) {
         console.log(connection);
 
-        connection.getOverlay("label").setLabel("123");
+        // connection.getOverlay("label").setLabel("123");
       };
       let addEndpoints = function(toId, sourceAnchors, targetAnchors) {
         console.log(toId, sourceAnchors, targetAnchors);
@@ -223,6 +230,7 @@ export default {
           var sourceUUID = toId + sourceAnchors[i];
           instance.addEndpoint(toId, sourceEndpoint, {
             anchor: sourceAnchors[i],
+            
             uuid: sourceUUID
           });
         }
@@ -253,17 +261,21 @@ export default {
  
     addEndpoints(
             $("#start"),
-            ["BottomRight", "BottomCenter"],
-            ["BottomLeft"]
+            ["BottomRight", "BottomCenter", "BottomLeft"], []
           );
 
       $(".box-card .chart-item").draggable({
         scope: "plant",
         helper: "clone",
-        containment: $("#work-container")
+        containment: $("#work-container"),
+        // cursor : 'pointer',
+        // tolerance : 'fit',
+        // revert : true,
+        
       });
       $("#workplace").droppable({
         scope: "plant",
+        
         drop: function(ev, ui) {
           console.log(ev, ui);
 
@@ -295,19 +307,24 @@ export default {
           });
           addEndpoints(
             id,
-            ["BottomRight", "BottomCenter"],
-            ["BottomLeft"]
+             
+            ["BottomRight", "BottomCenter", "BottomLeft"],
+            ["TopCenter"]
           );
           instance.draggable(id, {
             grid: [1, 1]
           });
+         
         }
       });
 
       jsPlumb.fire("jsPlumbDemoLoaded", instance);
     });
+
+  
   },
-  methods: {}
+  methods: {
+  }
 };
 </script>
 <style lang="scss">
@@ -399,6 +416,21 @@ export default {
       padding-left: 5px;
     }
   }
+}
+.arrowdown {
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 13px solid #3b3c3a;
+    display: inline-block;
+    position: absolute;
+    z-index: 12;
+    top: 1px;
+    svg{
+      opacity: 0;
+    }
+}
+.jtk-endpoint-anchor{
+  cursor: crosshair;
 }
 .workplace {
   width: 100%;
