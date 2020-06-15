@@ -71,7 +71,24 @@
       </div>
     </aside>
     <main class="glocom-main__workplace w-100">
-      <div class="glocom-main__workplace--board workplace" id="workplace">
+      <div class="glocom-main__workplace--board workplace " id="workplace">
+     
+        <div  class="start-call chart-item position-absolute" id="start">
+            <div class="start-call__header d-flex justify-content-between align-content-center">
+            
+              <div><i class="fa fa-circle"></i> Start</div>
+              <i style="position: relative;top: 4px;" class="fa fa-times-circle "></i>
+            </div>
+            <div class="start-call__body">
+              PHLO Execution will start from this node
+            </div>
+            <div class="start-call__footer d-flex justify-content-between">
+              <div>Incoming SMS</div>
+              <div>Incoming Call</div>
+              <div>API Request</div>
+            </div>
+          </div>
+        
       </div>
     </main>
 
@@ -88,6 +105,7 @@ export default {
   },
   mounted() {
     jsPlumb.ready(function() {
+    
       let instance = jsPlumb.getInstance({
         // drag options
         DragOptions: { cursor: "pointer", zIndex: 2000 },
@@ -151,7 +169,7 @@ export default {
           "Flowchart",
           {
             stub: [40, 60],
-            gap: 10,
+            gap: 5,
             cornerRadius: 1,
             alwaysRespectStubs: true
           }
@@ -231,6 +249,14 @@ export default {
         });
 
       });
+    instance.draggable($("#start"));
+ 
+    addEndpoints(
+            $("#start"),
+            ["BottomRight", "BottomCenter"],
+            ["BottomLeft"]
+          );
+
       $(".box-card .chart-item").draggable({
         scope: "plant",
         helper: "clone",
@@ -241,7 +267,7 @@ export default {
         drop: function(ev, ui) {
           console.log(ev, ui);
 
-          let id = "item" + new Date().getTime();
+          let id = "glocom" + new Date().getTime();
 
           let html = `
           <div id="${id}" class="start-call chart-item">
@@ -260,7 +286,8 @@ export default {
             </div>
           
           </div>`;
-// ${ui.helper.html()}  
+          // ${ui.helper.html()}  
+
           $(this).append(html);
           $("#" + id).css({
             top: ui.position.top - 20 + "px",
@@ -284,11 +311,7 @@ export default {
 };
 </script>
 <style lang="scss">
-// $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
-// @import "~@fortawesome/fontawesome-free/scss/fontawesome";
-// @import "~@fortawesome/fontawesome-free/scss/solid"; // fa
-// @import "~@fortawesome/fontawesome-free/scss/regular"; // far
-// @import "~@fortawesome/fontawesome-free/scss/brands"; // fab
+
 .glocom-main{
   height: 100vh;
   &__aside{
