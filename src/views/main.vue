@@ -1,23 +1,23 @@
 <template>
   <div class="glocom-main d-flex" id="work-container">
-
+    <notifications group="foo" />
     <aside class="glocom-main__aside">
       <div class="glocom-main__aside__content box-card">
         <div class="glocom-main__aside__content--search">
           <input type="text" class="form-control" placeholder="Search Components..">
         </div>
         <hr>
-
         <div class="glocom-main__aside__content__components">
           <!-- <p>Messaging</p> -->
-          <div class="item mt-4">
-            <div class="glocom-main__aside__content__components--blue playAudio" id="playAudio">
-              <span><i class="fa fa-play"></i> Play Audio</span>
-            </div>
-          </div>
-          <div class="item mt-2" >
+
+          <div class="item mt-2">
             <div class="glocom-main__aside__content__components--purple initiate-call" id="initCall">
               <span><i class="fa fa-phone"></i> Initiat Call</span>
+            </div>
+          </div>
+          <div class="item mt-2">
+            <div class="glocom-main__aside__content__components--blue playAudio" id="playAudio">
+              <span><i class="fa fa-play"></i> Play Audio</span>
             </div>
           </div>
         </div>
@@ -25,12 +25,9 @@
     </aside>
     <main class="glocom-main__workplace w-100">
       <div class="glocom-main__workplace--board workplace " id="workplace">
-
         <div class="start-call chart-item position-absolute" id="start">
           <div class="start-call__header d-flex justify-content-between align-content-center">
-
             <div><i class="fa fa-circle"></i> Start</div>
-            <i style="position: relative;top: 4px;" class="fa fa-times-circle "></i>
           </div>
           <div class="start-call__body">
             PHLO Execution will start from this node
@@ -41,24 +38,34 @@
             <div>API Request</div>
           </div>
         </div>
-
       </div>
     </main>
-
   </div>
 </template>
-
 <script>
+  import Vue from 'vue'
+  import Notifications from 'vue-notification'
+  import VueSweetalert2 from 'vue-sweetalert2';
+  import 'sweetalert2/dist/sweetalert2.min.css';
+  Vue.use(VueSweetalert2);
+  /*
+  or for SSR:
+  import Notifications from 'vue-notification/dist/ssr.js'
+  */
+  Vue.use(Notifications)
+  import {
+    v4 as uuidv4
+  } from 'uuid';
   export default {
     name: "DragToWorkplace",
     data() {
       return {
-        list: ["circle", "diamond", "ellipse", "rectangle"]
+        list: ["circle", "diamond", "ellipse", "rectangle"],
+        uuid: uuidv4()
       };
     },
     mounted() {
       jsPlumb.ready(function () {
-
         let instance = jsPlumb.getInstance({
           // drag options
           DragOptions: {
@@ -119,7 +126,6 @@
             fill: "transparent",
             radius: 10,
             strokeWidth: 1,
-
           },
           dragOptions: {
             hoverClass: "hover",
@@ -128,19 +134,18 @@
           // anchor:[ "Perimeter", { shape:"Square" } ],
           isSource: true,
           // isTarget: true,
-          connector: [
-            "Flowchart",
-            {
-              stub: [40, 10],
-              gap: 1,
-              cornerRadius: 5,
-              alwaysRespectStubs: true
-            }
-          ],
+          // connector: [
+          //   "Flowchart",
+          //   {
+          //     stub: [40, 10],
+          //     gap: 1,
+          //     cornerRadius: 5,
+          //     alwaysRespectStubs: true
+          //   }
+          // ],
           connectorStyle: connectorPaintStyle,
           hoverPaintStyle: endpointHoverStyle,
           connectorHoverStyle: connectorHoverStyle,
-
           // overlays: [
           //   [
           //     "Label",
@@ -178,60 +183,125 @@
                 label: "Drop",
                 cssClass: "endpointTargetLabel",
                 visible: false,
-
               }
             ]
           ]
         };
-        let init = function (connection) {
-          console.log(connection);
 
+        let init = function (connection) {
+          // console.log(connection);
           connection.getOverlay("label").setLabel("123");
         };
-              let addEndpoints = function(toId, sourceAnchors, targetAnchors) {
-        console.log(toId, sourceAnchors, targetAnchors);
-        for (var i = 0; i < sourceAnchors.length; i++) {
-          var sourceUUID = toId + sourceAnchors[i];
-          instance.addEndpoint(toId, sourceEndpoint, {
-            anchor: sourceAnchors[i],
-            uuid: sourceUUID
-          });
-        }
-        for (var j = 0; j < targetAnchors.length; j++) {
-          var targetUUID = toId + targetAnchors[j];
-          instance.addEndpoint(toId, targetEndpoint, {
-            anchor: targetAnchors[j],
-            // anchor: 'Continuous',
-            uuid: targetUUID
-          });
-        }
-      };
+        let addEndpoints = function (toId, sourceAnchors, targetAnchors) {
+          // console.log(toId, sourceAnchors, targetAnchors);
+          for (var i = 0; i < sourceAnchors.length; i++) {
+            var sourceUUID = toId + sourceAnchors[i];
+            let s0 = instance.addEndpoint(toId, sourceEndpoint, {
+              anchor: sourceAnchors[i],
+              uuid: sourceUUID,
+            });
+          }
+          for (var j = 0; j < targetAnchors.length; j++) {
+            var targetUUID = toId + targetAnchors[j];
+            instance.addEndpoint(toId, targetEndpoint, {
+              anchor: targetAnchors[j],
+              // anchor: 'Continuous',
+              uuid: targetUUID
+            });
+          }
+          instance.bind("beforeDrop", function (connInfo, originalEvent) {
+            String.prototype.includes = function (...args) {
+              return args.filter(str => this.indexOf(str) > -1).length === args.length;
+            };
+            console.log(connInfo.connection.endpoints[0].getUuid() + ' --> ' + connInfo.dropEndpoint
+            .getUuid());
+
+            if (connInfo.connection.endpoints[0].getUuid().includes("start") && connInfo.dropEndpoint
+              .getUuid().includes("playaudio")) {
+              Vue.notify({
+                group: 'foo',
+                // title: 'Important message',
+                text: 'Oops, something went wrong!',
+                type: 'error'
+              })
+              instance.deleteConnection(connInfo.connection)
+            } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomCenter") &&
+              connInfo.dropEndpoint.getUuid().includes("initcall")) {
+              Vue.notify({
+                group: 'foo',
+                // title: 'Important message',
+                text: 'Oops, something went wrong!',
+                type: 'error'
+              })
+              instance.deleteConnection(connInfo.connection)
+            } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomLeft") && connInfo
+              .dropEndpoint.getUuid().includes("initcall")) {
+              Vue.notify({
+                group: 'foo',
+                // title: 'Important message',
+                text: 'Oops, something went wrong!',
+                type: 'error'
+              })
+              instance.deleteConnection(connInfo.connection)
+            } else if (connInfo.connection.endpoints[0].getUuid().includes("initcall", "BottomRight") &&
+              connInfo
+              .dropEndpoint.getUuid().includes("playaudio")) {
+              Vue.notify({
+                group: 'foo',
+                // title: 'Important message',
+                text: 'Oops, something went wrong!',
+                type: 'error'
+              })
+              instance.deleteConnection(connInfo.connection)
+            } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomRight") && connInfo
+              .dropEndpoint.getUuid().includes("initcall")) {
+              init(connInfo.connection);
+            } else {
+              init(connInfo.connection);
+
+            }
+          })
+        };
 
         instance.batch(function () {
-          instance.bind("connection", function (connInfo, originalEvent) {
-            init(connInfo.connection);
-          });
-
-
           instance.bind("click", function (conn, originalEvent) {
             if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
-              instance.detach(conn);
+              instance.deleteConnection(conn);
             conn.toggleType("basic");
           });
+          $(document).on('click', '.remove', function () {
+            Vue.swal({
+              title: 'Are you sure?',
+              // text: "You won't be able to revert this!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+              instance.remove($(this).parent().parent());
+              if (result.value) {
+                Vue.swal(
+                  'Deleted!',
+                  ' ',
+                  'success'
+                )
+              }
+            })
 
+            //other logic goes here...
+          });
         });
         instance.draggable($("#start"));
-
         addEndpoints(
-          $("#start"),
+          "start",
           ["BottomRight", "BottomCenter", "BottomLeft"], []
         );
-
         $(".initiate-call").draggable({
           scope: "plant",
           helper: "clone",
           containment: $("#work-container"),
-        }); 
+        });
         $(".playAudio").draggable({
           scope: "plant",
           helper: "clone",
@@ -239,20 +309,18 @@
         });
         $("#workplace").droppable({
           scope: "plant",
-
-          drop: function (ev, ui) {; 
-            console.log(ev, ui);
+          drop: function (ev, ui) {
+            ;
+            // console.log(ev, ui);
             // Detect if initiate call is dropped 
             if (ui.draggable[0].id == 'initCall') {
-              let id = "glocom" + new Date().getTime() + 'initcall';
-              console.log(id);
-
+              let id = 'initcall' + uuidv4();
+              // console.log(id);
               let html = `
                 <div id="${id}" class="init-call chart-item">
                   <div class="init-call__header d-flex justify-content-between align-content-center">
-                  
                     <div><i class="fa fa-circle"></i> Initiate Call </div>
-                    <i style="position: relative;top: 4px;" class="fa fa-times-circle "></i>
+                    <a class="remove"><i style="position: relative;top: 4px;" class="fa fa-times-circle "></i></a>
                   </div>
                   <div class="init-call__body">  
                       Initiate a call to a list of phone numbers or endpoints
@@ -261,7 +329,6 @@
                     <div>Answered</div>
                     <div>Faild</div>
                   </div>
-                
                 </div>`;
               $(this).append(html);
               $("#" + id).css({
@@ -275,23 +342,20 @@
               instance.draggable(id, {
                 grid: [1, 1]
               });
-            } 
+            }
             // Play Audio
             if (ui.draggable[0].id == 'playAudio') {
-              let id = "glocom" + new Date().getTime() + 'playaudio';
-              console.log(id);
-
+              let id = 'playaudio' + uuidv4();
+              // console.log(id);
               let html = `
                 <div id="${id}" class="play-audio chart-item">
                   <div class="play-audio__header d-flex justify-content-between align-content-center">
-                  
                     <div><i class="fa fa-circle"></i> Play Audio </div>
-                    <i style="position: relative;top: 4px;" class="fa fa-times-circle "></i>
+                   <a class="remove"> <i style="position: relative;top: 4px;" class="fa fa-times-circle "></i></a>
                   </div>
                   <div class="play-audio__body">  
                       Initiate a call to a list of phone numbers or endpoints
                   </div>
-                
                 </div>`;
               $(this).append(html);
               $("#" + id).css({
@@ -306,14 +370,10 @@
                 grid: [1, 1]
               });
             }
-
           }
         });
-
         jsPlumb.fire("jsPlumbDemoLoaded", instance);
       });
-
-
     },
     methods: {}
   };
@@ -383,9 +443,12 @@
       }
     }
   }
-.playAudio, .initiate-call{
-  cursor: pointer;
-}
+
+  .playAudio,
+  .initiate-call {
+    cursor: pointer;
+  }
+
   .start-call {
     width: 275px;
     border: 1px solid #53c251;
@@ -404,7 +467,6 @@
       padding: 10px 15px;
       height: 80px;
       background-color: #fff;
-
     }
 
     &__footer {
@@ -444,7 +506,6 @@
       padding: 10px 15px;
       height: 80px;
       background-color: #fff;
-
     }
 
     &__footer {
@@ -464,7 +525,8 @@
         padding-left: 5px;
       }
     }
-  } 
+  }
+
   .play-audio {
     width: 275px;
     border: 1px solid #5dbcd2;
@@ -483,7 +545,6 @@
       padding: 10px 15px;
       height: 80px;
       background-color: #fff;
-
     }
 
     &__footer {
@@ -503,6 +564,10 @@
         padding-left: 5px;
       }
     }
+  }
+
+  .remove {
+    cursor: pointer;
   }
 
   .arrowdown {
