@@ -1,7 +1,7 @@
 <template>
   <div class="glocom-main d-flex" id="work-container">
     <notifications group="foo" />
-   
+
     <aside class="glocom-main__aside">
       <div class="glocom-main__aside__content box-card">
         <div class="glocom-main__aside__content--search">
@@ -21,7 +21,7 @@
               <span><i class="fa fa-play"></i> Play Audio</span>
             </div>
           </div>
-           <button class="btn btn-success d-block text-center mt-2" id="save">Save</button>
+          <button class="btn btn-success d-block text-center mt-2" id="save">Save</button>
         </div>
       </div>
     </aside>
@@ -170,7 +170,7 @@
             radius: 0
           },
           hoverPaintStyle: endpointHoverStyle,
-          maxConnections: 1,
+          maxConnections: 2,
           dropOptions: {
             hoverClass: "hover",
             activeClass: "active"
@@ -216,7 +216,7 @@
               return args.filter(str => this.indexOf(str) > -1).length === args.length;
             };
             console.log(connInfo.connection.endpoints[0].getUuid() + ' --> ' + connInfo.dropEndpoint
-            .getUuid());
+              .getUuid());
 
             if (connInfo.connection.endpoints[0].getUuid().includes("start") && connInfo.dropEndpoint
               .getUuid().includes("playaudio")) {
@@ -375,66 +375,277 @@
           }
         });
         jsPlumb.fire("jsPlumbDemoLoaded", instance);
-//          function Save() {
-//     $(".chart-item").resizable("destroy");
-//     Objs = [];
-//     $('.chart-item').each(function() {
-//         Objs.push({id:$(this).attr('id'), html:$(this).html(),left:$(this).css('left'),top:$(this).css('top'),width:$(this).css('width'),height:$(this).css('height')});
-//     });
-//     console.log(Objs);
-// }
-$('#save').on('click', function() {
-//  console.log(instance.getAllConnections());
-       
-        var nodes = []
 
-        $(".workplace .node").each(function (idx, elem) {
+        (function (jsPlumbInstance) {
+          jsPlumbInstance.load = function (options, plumbInstance) {
+            if (!options || !options.savedObj || !options.containerSelector) {
+              return;
+            }
+            var conn = options.savedObj;
+            plumbInstance = plumbInstance || jsPlumb;
+            var blocks = conn.blocks;
+            for (var i = 0; i < blocks.length; i++) {
+              var o = blocks[i];
+              if ($("#" + o.id).length == 0) {
+                var elem = $("<div/>");
+                elem.attr('id', o.id);
+                elem.css({
+                  left: o.left,
+                  top: o.top,
+                  width: o.width,
+                  height: o.height,
+                  position: 'absolute'
+                });
+                elem.html(o.html);
+                elem.attr({
+                  'class': 'window'
+                });
+                $(options.containerSelector).append(elem);
+              } else {
+                $("#" + o.id).css({
+                  left: o.left,
+                  top: o.top,
+                  width: o.width,
+                  height: o.height
+                });
+              }
+            }
+            var connections = conn.connections;
+            for (var i = 0; i < connections.length; i++) {
+              console.log(connections[i].endpoint);
+
+              var connection1 = plumbInstance.connect({
+                source: connections[i].sourceId,
+                target: connections[i].targetId,
+                anchors: function () {
+                  var temp = [];
+                  connections[i].anchors.forEach(function (anc) {
+                    if (anc.type) {
+                      temp.push(anc.type);
+                    } else {
+                      var x = anc.x;
+                      var y = anc.y;
+                      var arr = [x, y].concat(anc.orientation).concat(anc.offset);
+                      temp.push(arr);
+                    }
+                  });
+                  return temp;
+                }(),
+                paintStyle: connections[i].paintStyle,
+                hoverPaintStyle: connections[i].hoverPaintStyle,
+                endpointStyles: connections[i].endpointStyle,
+                endpoints: connections[i].endpoint,
+                connector: [connections[i].connectorType, connections[i].connectorAttr],
+                labelStyle: {
+                  cssClass: connections[i].labelClassName
+                }
+              });
+              connections[i].overlays.forEach(function (overlay) {
+                connection1.addOverlay([overlay.type, overlay]);
+              });
+            }
+            plumbInstance.draggable(plumbInstance.getSelector(options.savedObj.selector), {
+              drag: function () {}
+            });
+          };
+
+
+          jsPlumbInstance.save = function (options, plumbInstance) {
+            if (!options || !options.selector) {
+              return {};
+            }
+            plumbInstance = plumbInstance || jsPlumb;
+            var connection;
+            connection = plumbInstance.getAllConnections();
+            var blocks = [];
+            $(options.selector).each(function (idx, elem) {
+              var $elem = $(elem);
+              var id = $elem.attr('id');
+              blocks.push({
+                id: $elem.attr('id'),
+                left: parseInt($elem.css("left"), 10),
+                top: parseInt($elem.css("top"), 10),
+                width: parseInt($elem.css("width"), 10),
+                heigth: parseInt($elem.css("heigth"), 10),
+                html: $elem.html()
+              });
+            });
+            var connections = [];
+            for (var i = 0; i < connection.length; i++) {
+              var id = connection[i].sourceId;
+              var endpoints = plumbInstance.getEndpoints(connection[i].sourceId);
+              var connector = connection[i].getConnector();
+              var type = connector.type;
+              var attrs = {};
+              switch (type) {
+                case "Bezier":
+                  attrs["curviness"] = connector.getCurviness();
+                  break;
+                case "Straight": {
+                  break;
+                }
+                case "Flowchart ": {
+                  break;
+                }
+                case "State Machine": {
+                  attrs["curviness"] = connector.getCurviness();
+                  break;
+                }
+              }
+              var endpointArray = [];
+              connection[i].endpoints.forEach(function (endpoint) {
+                var options = {};
+                if (endpoint.type == 'Image') {
+                  options.url = endpoint.canvas.src;
+                  options.anchor = endpoint.anchor;
+                  endpointArray.push([endpoint.type, options]);
+                } else {
+                  options.anchor = endpoint.anchor;
+                  endpointArray.push([endpoint.type, options]);
+                }
+                console.log(options);
+              });
+
+              connections.push({
+                path: connector.getPath(),
+                segment: connector.getSegments(),
+                connectorType: type,
+                connectorAttr: attrs,
+                connectionId: connection[i].id,
+                sourceId: connection[i].sourceId,
+                targetId: connection[i].targetId,
+                sourceEndpointUuid: connection[i].endpoints[0].getUuid(),
+                targetEndpointUuid: connection[i].endpoints[1].getUuid(),
+                paintStyle: connection[i].getPaintStyle(),
+                endpointStyle: function () {
+                  var temp = [];
+                  connection[i].endpoints.forEach(function (endpoint) {
+                    temp.push(endpoint.getPaintStyle());
+                  });
+                  return temp;
+                }(),
+                hoverPaintStyle: connection[i].getHoverPaintStyle(),
+                endpoint: endpointArray,
+                anchors: function () {
+                  var temp = [];
+                  connection[i].endpoints.forEach(function (endpoint) {
+                    var tempObj = {
+                      uuid: endpoint.getUuid(),
+                      x: endpoint.anchor.x,
+                      y: endpoint.anchor.y,
+                      orientation: endpoint.anchor.orientation,
+                      offset: endpoint.anchor.offsets,
+                      parameters: endpoint.getParameters(),
+                      type: endpoint.anchor.type
+                    };
+                    temp.push(tempObj);
+                  });
+                  return temp;
+                }(),
+                labelText: connection[i].getLabel(),
+                overlays: $.map(connection[i].getOverlays(), function (overlay) {
+                  var temp = new Array();
+                  var obj = {};
+                  for (var key in overlay) {
+                    if (typeof overlay[key] !== 'function' && typeof overlay[key] !== 'object' &&
+                      typeof overlay[key] != 'undefined') {
+                      if (key == 'loc') {
+                        obj["location"] = overlay[key];
+                      } else {
+                        obj[key] = overlay[key];
+                      }
+                    }
+                  }
+                  obj["cssClass"] = overlay.canvas.className;
+                  temp.push(obj);
+                  return temp;
+                })
+              });
+            }
+
+            var obj = {
+              selector: options.selector,
+              connections: connections,
+              blocks: blocks
+            };
+            return obj;
+          };
+
+        })(jsPlumb);
+        // $('#save').on('click', function() {
+        //   var savedObj = jsPlumb.save({selector : ".window" }); //If no plumbInstance is passed then global jsPlumb variable is used
+        //   console.log(JSON.stringify(savedObj));
+
+        // });
+        $('#save').on('click', function () {
+          console.log(instance.getAllConnections());
+
+          var nodes = []
+
+          $(".workplace .node").each(function (idx, elem) {
             var $elem = $(elem);
             var endpoints = instance.getEndpoints($elem.attr('id'));
             nodes.push({
-                id: $elem.attr('id'),
-                // text: $elem.find($(".node")).text(),
-                positionX: parseInt($elem.css("left"), 10),
-                positionY: parseInt($elem.css("top"), 10)
+              id: $elem.attr('id'),
+              html: $elem.html(),
+              positionX: parseInt($elem.css("left"), 10),
+              positionY: parseInt($elem.css("top"), 10)
             });
-        });
-        var connections = [];
-        $.each(instance.getAllConnections(), function (idx, connection) {
+
+          });
+          var connections = [];
+          $.each(instance.getAllConnections(), function (idx, connection) {
+
+
             connections.push({
-                connectionId: connection.id,
-                sourceId: connection.sourceId,
-                targetId: connection.targetId,
-                // anchors: $.map(connection.endpoints, function (endpoint) {
+              connectionId: connection.id,
+              sourceId: connection.sourceId,
+              targetId: connection.targetId,
+              sourceEndpointUuid: connection.endpoints[0].getUuid(),
+              targetEndpointUuid: connection.endpoints[1].getUuid(),
 
-                //     return [[endpoint.anchor.x,
-                //     endpoint.anchor.y,
-                //     endpoint.anchor.orientation[0],
-                //     endpoint.anchor.orientation[1],
-                //     endpoint.anchor.offsets[0],
-                //     endpoint.anchor.offsets[1]]];
+              anchors: $.map(connection.endpoints, function (endpoint) {
 
-                // })
+                return [
+                  [endpoint.anchor.x,
+                    endpoint.anchor.y,
+                    endpoint.anchor.orientation[0],
+                    endpoint.anchor.orientation[1],
+                    endpoint.anchor.offsets[0],
+                    endpoint.anchor.offsets[1]
+                  ]
+                ];
+
+              })
             });
+          });
+
+          var flowChart = {};
+          flowChart.nodes = nodes;
+          flowChart.connections = connections;
+          console.log(JSON.stringify(flowChart));
+          // console.log(flowChart);
         });
+        // $('#save').on('click', function() {
 
-        var flowChart = {};
-        flowChart.nodes = nodes;
-        flowChart.connections = connections;
-        console.log(JSON.stringify(flowChart));
-        // console.log(flowChart);
-});
 
+        //   var uuid, index=0; // Array to store the endpoint sets.
+        // instance.bind("connection", function(ci) {
+        //     var eps = ci.connection.endpoints;
+        //     console.log(eps[0].getUuid() +"->"+ eps[1].getUuid()); // store this information in 2d-Array or any other format you wish
+        //     uuid[index][0]=eps[0].getUuid(); // source endpoint id
+        //     uuid[index++][1]=eps[1].getUuid(); // target endpoint id
+        //     console.log(JSON.stringify(eps));
+        // });
+        // });
 
       });
     },
     methods: {
-      save(){
-        this.save();
-      }
-     
+
+
     }
   };
-
 </script>
 <style lang="scss">
   .glocom-main {
@@ -505,9 +716,11 @@ $('#save').on('click', function() {
   .initiate-call {
     cursor: pointer;
   }
-.jtk-endpoint{
-  z-index: auto !important;
-}
+
+  .jtk-endpoint {
+    z-index: auto !important;
+  }
+
   .start-call {
     width: 275px;
     border: 1px solid #53c251;
@@ -521,7 +734,7 @@ $('#save').on('click', function() {
     }
 
     &__body {
-      color: rgba(52, 58, 64, .5);
+      color: rgba(52, 58, 64, 0.5);
       font-size: 13px;
       padding: 10px 15px;
       height: 80px;
@@ -561,7 +774,7 @@ $('#save').on('click', function() {
     }
 
     &__body {
-      color: rgba(52, 58, 64, .5);
+      color: rgba(52, 58, 64, 0.5);
       font-size: 13px;
       padding: 10px 15px;
       height: 80px;
@@ -575,6 +788,7 @@ $('#save').on('click', function() {
       height: 30px;
       line-height: 30px;
       background-color: #fff;
+
       div:nth-child(1) {
         border-right: 1px solid #ddd;
         padding-right: 5px;
@@ -601,7 +815,7 @@ $('#save').on('click', function() {
     }
 
     &__body {
-      color: rgba(52, 58, 64, .5);
+      color: rgba(52, 58, 64, 0.5);
       font-size: 13px;
       padding: 10px 15px;
       height: 80px;
@@ -654,8 +868,9 @@ $('#save').on('click', function() {
     width: 100%;
     height: 100%;
     position: relative;
-    background-image: radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.058823529411764705) 1px, transparent 0);
+    background-image: radial-gradient(circle at 1px 1px,
+        rgba(0, 0, 0, 0.058823529411764705) 1px,
+        transparent 0);
     background-size: 17px 17px;
   }
-
 </style>
