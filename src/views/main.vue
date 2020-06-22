@@ -1,6 +1,7 @@
 <template>
   <div class="glocom-main d-flex" id="work-container">
     <notifications group="foo" />
+   
     <aside class="glocom-main__aside">
       <div class="glocom-main__aside__content box-card">
         <div class="glocom-main__aside__content--search">
@@ -20,12 +21,13 @@
               <span><i class="fa fa-play"></i> Play Audio</span>
             </div>
           </div>
+           <button class="btn btn-success d-block text-center mt-2" id="save">Save</button>
         </div>
       </div>
     </aside>
     <main class="glocom-main__workplace w-100">
       <div class="glocom-main__workplace--board workplace " id="workplace">
-        <div class="start-call chart-item position-absolute" id="start">
+        <div class="start-call chart-item position-absolute node" id="start">
           <div class="start-call__header d-flex justify-content-between align-content-center">
             <div><i class="fa fa-circle"></i> Start</div>
           </div>
@@ -317,7 +319,7 @@
               let id = 'initcall' + uuidv4();
               // console.log(id);
               let html = `
-                <div id="${id}" class="init-call chart-item">
+                <div id="${id}" class="init-call chart-item node">
                   <div class="init-call__header d-flex justify-content-between align-content-center">
                     <div><i class="fa fa-circle"></i> Initiate Call </div>
                     <a class="remove"><i style="position: relative;top: 4px;" class="fa fa-times-circle "></i></a>
@@ -348,7 +350,7 @@
               let id = 'playaudio' + uuidv4();
               // console.log(id);
               let html = `
-                <div id="${id}" class="play-audio chart-item">
+                <div id="${id}" class="play-audio chart-item node">
                   <div class="play-audio__header d-flex justify-content-between align-content-center">
                     <div><i class="fa fa-circle"></i> Play Audio </div>
                    <a class="remove"> <i style="position: relative;top: 4px;" class="fa fa-times-circle "></i></a>
@@ -373,9 +375,64 @@
           }
         });
         jsPlumb.fire("jsPlumbDemoLoaded", instance);
+//          function Save() {
+//     $(".chart-item").resizable("destroy");
+//     Objs = [];
+//     $('.chart-item').each(function() {
+//         Objs.push({id:$(this).attr('id'), html:$(this).html(),left:$(this).css('left'),top:$(this).css('top'),width:$(this).css('width'),height:$(this).css('height')});
+//     });
+//     console.log(Objs);
+// }
+$('#save').on('click', function() {
+//  console.log(instance.getAllConnections());
+       
+        var nodes = []
+
+        $(".workplace .node").each(function (idx, elem) {
+            var $elem = $(elem);
+            var endpoints = instance.getEndpoints($elem.attr('id'));
+            nodes.push({
+                id: $elem.attr('id'),
+                // text: $elem.find($(".node")).text(),
+                positionX: parseInt($elem.css("left"), 10),
+                positionY: parseInt($elem.css("top"), 10)
+            });
+        });
+        var connections = [];
+        $.each(instance.getAllConnections(), function (idx, connection) {
+            connections.push({
+                connectionId: connection.id,
+                sourceId: connection.sourceId,
+                targetId: connection.targetId,
+                // anchors: $.map(connection.endpoints, function (endpoint) {
+
+                //     return [[endpoint.anchor.x,
+                //     endpoint.anchor.y,
+                //     endpoint.anchor.orientation[0],
+                //     endpoint.anchor.orientation[1],
+                //     endpoint.anchor.offsets[0],
+                //     endpoint.anchor.offsets[1]]];
+
+                // })
+            });
+        });
+
+        var flowChart = {};
+        flowChart.nodes = nodes;
+        flowChart.connections = connections;
+        console.log(JSON.stringify(flowChart));
+        // console.log(flowChart);
+});
+
+
       });
     },
-    methods: {}
+    methods: {
+      save(){
+        this.save();
+      }
+     
+    }
   };
 
 </script>
@@ -448,7 +505,9 @@
   .initiate-call {
     cursor: pointer;
   }
-
+.jtk-endpoint{
+  z-index: auto !important;
+}
   .start-call {
     width: 275px;
     border: 1px solid #53c251;
@@ -498,6 +557,7 @@
       border-bottom: 1px solid #b56adf;
       padding: 5px 15px;
       text-align: left;
+      background-color: #fff;
     }
 
     &__body {
@@ -514,7 +574,7 @@
       padding: 0 15px;
       height: 30px;
       line-height: 30px;
-
+      background-color: #fff;
       div:nth-child(1) {
         border-right: 1px solid #ddd;
         padding-right: 5px;
@@ -537,6 +597,7 @@
       border-bottom: 1px solid #5dbcd2;
       padding: 5px 15px;
       text-align: left;
+      background: #fff;
     }
 
     &__body {
@@ -553,6 +614,7 @@
       padding: 0 15px;
       height: 30px;
       line-height: 30px;
+      background-color: #fff;
 
       div:nth-child(1) {
         border-right: 1px solid #ddd;
@@ -576,7 +638,7 @@
     border-top: 13px solid #3b3c3a;
     display: inline-block;
     position: absolute;
-    z-index: 12;
+    z-index: auto;
     top: 1px;
 
     svg {
