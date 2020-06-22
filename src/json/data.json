@@ -1,0 +1,56 @@
+{
+  "nodes": [{
+    "id": "start",
+    "positionX": 40,
+    "positionY": 26
+  }, {
+    "id": "initcallcde845f2-0108-4d16-b92f-48b4302273aa",
+    "positionX": 284,
+    "positionY": 227
+  }, {
+    "id": "playaudiob7b11c50-abd2-436d-a203-5f62a52f3f5d",
+    "positionX": 9,
+    "positionY": 444
+  }, {
+    "id": "initcall57c30fd1-d9c6-466a-939a-3d40bd7242d4",
+    "positionX": 503,
+    "positionY": 431
+  }, {
+    "id": "initcallfed0257d-571b-4eb9-9bc5-212e68e3a638",
+    "positionX": 777,
+    "positionY": 637
+  }, {
+    "id": "playaudio0f4b3f69-ef55-4cc2-8b3b-fdeac75aec6f",
+    "positionX": 173,
+    "positionY": 647
+  }, {
+    "id": "playaudio8a93e92e-74d9-48da-942f-98d277e097f2",
+    "positionX": 361,
+    "positionY": 793
+  }],
+  "connections": [{
+    "connectionId": "con_16",
+    "sourceId": "start",
+    "targetId": "initcallcde845f2-0108-4d16-b92f-48b4302273aa"
+  }, {
+    "connectionId": "con_28",
+    "sourceId": "initcallcde845f2-0108-4d16-b92f-48b4302273aa",
+    "targetId": "initcall57c30fd1-d9c6-466a-939a-3d40bd7242d4"
+  }, {
+    "connectionId": "con_32",
+    "sourceId": "initcallcde845f2-0108-4d16-b92f-48b4302273aa",
+    "targetId": "playaudiob7b11c50-abd2-436d-a203-5f62a52f3f5d"
+  }, {
+    "connectionId": "con_42",
+    "sourceId": "initcall57c30fd1-d9c6-466a-939a-3d40bd7242d4",
+    "targetId": "initcallfed0257d-571b-4eb9-9bc5-212e68e3a638"
+  }, {
+    "connectionId": "con_48",
+    "sourceId": "initcall57c30fd1-d9c6-466a-939a-3d40bd7242d4",
+    "targetId": "playaudio0f4b3f69-ef55-4cc2-8b3b-fdeac75aec6f"
+  }, {
+    "connectionId": "con_54",
+    "sourceId": "initcallfed0257d-571b-4eb9-9bc5-212e68e3a638",
+    "targetId": "playaudio8a93e92e-74d9-48da-942f-98d277e097f2"
+  }]
+}
