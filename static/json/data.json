@@ -1,0 +1,96 @@
+{
+  "selector": ".node",
+  "connections": [{
+    "connectionId": "con_18",
+    "sourceId": "start",
+    "targetId": "initcallf2f848c7-2a17-49db-bf88-2ac6b417a34e",
+    "sourceEndpointUuid": "startBottomRight",
+    "targetEndpointUuid": "initcallf2f848c7-2a17-49db-bf88-2ac6b417a34eTopCenter",
+    "paintStyle": {
+      "strokeWidth": 1,
+      "stroke": "#111",
+      "joinstyle": "square",
+      "outlineStroke": "white",
+      "outlineWidth": 1
+    },
+    "endpointStyle": [{
+      "stroke": "#111",
+      "fill": "transparent",
+      "radius": 10,
+      "strokeWidth": 1
+    }, {
+      "fill": "#111",
+      "radius": 0
+    }],
+    "hoverPaintStyle": {
+      "strokeWidth": 3,
+      "stroke": "#111",
+      "joinstyle": "square",
+      "outlineStroke": "white",
+      "outlineWidth": 5
+    },
+    "anchors": [
+      [1, 1, 0, 1, 0, 0],
+      [0.5, 0, 0, -1, 0, 0]
+    ],
+    "labelText": null,
+    "overlays": []
+  }, {
+    "connectionId": "con_22",
+    "sourceId": "initcallf2f848c7-2a17-49db-bf88-2ac6b417a34e",
+    "targetId": "playaudio4c75bb58-4f53-4b22-a677-2412871f624b",
+    "sourceEndpointUuid": "initcallf2f848c7-2a17-49db-bf88-2ac6b417a34eBottomLeft",
+    "targetEndpointUuid": "playaudio4c75bb58-4f53-4b22-a677-2412871f624bTopCenter",
+    "paintStyle": {
+      "strokeWidth": 1,
+      "stroke": "#111",
+      "joinstyle": "square",
+      "outlineStroke": "white",
+      "outlineWidth": 1
+    },
+    "endpointStyle": [{
+      "stroke": "#111",
+      "fill": "transparent",
+      "radius": 10,
+      "strokeWidth": 1
+    }, {
+      "fill": "#111",
+      "radius": 0
+    }],
+    "hoverPaintStyle": {
+      "strokeWidth": 3,
+      "stroke": "#111",
+      "joinstyle": "square",
+      "outlineStroke": "white",
+      "outlineWidth": 5
+    },
+    "anchors": [
+      [0, 1, 0, 1, 0, 0],
+      [0.5, 0, 0, -1, 0, 0]
+    ],
+    "labelText": null,
+    "overlays": []
+  }],
+  "blocks": [{
+    "id": "start",
+    "left": 20,
+    "top": 20,
+    "width": 275,
+    "heigth": null,
+    "html": "<div id=\"start\" class=\"start-call chart-item position-absolute node jtk-managed jtk-draggable jtk-endpoint-anchor jtk-connected\"><div class=\"start-call__header d-flex justify-content-between align-content-center\"><div><i class=\"fa fa-circle\"></i> Start</div></div> <div class=\"start-call__body\">\n          PHLO Execution will start from this node\n        </div> <div class=\"start-call__footer d-flex justify-content-between\"><div>Incoming SMS</div> <div>Incoming Call</div> <div>API Request</div></div></div>"
+  }, {
+    "id": "initcallf2f848c7-2a17-49db-bf88-2ac6b417a34e",
+    "left": 607,
+    "top": 93,
+    "width": 275,
+    "heigth": null,
+    "html": "<div id=\"initcallf2f848c7-2a17-49db-bf88-2ac6b417a34e\" class=\"init-call chart-item node jtk-endpoint-anchor jtk-managed jtk-draggable jtk-connected\" style=\"top: 93px; left: 607px;\">\n                <div class=\"init-call__header d-flex justify-content-between align-content-center\">\n                  <div><i class=\"fa fa-circle\"></i> Initiate Call </div>\n                  <a class=\"remove\"><i style=\"position: relative;top: 4px;\" class=\"fa fa-times-circle \"></i></a>\n                </div>\n                <div class=\"init-call__body\">  \n                    Initiate a call to a list of phone numbers or endpoints\n                </div>\n                <div class=\"init-call__footer d-flex justify-content-between\">\n                  <div>Answered</div>\n                  <div>Faild</div>\n                </div>\n              </div>"
+  }, {
+    "id": "playaudio4c75bb58-4f53-4b22-a677-2412871f624b",
+    "left": 199,
+    "top": 257,
+    "width": 275,
+    "heigth": null,
+    "html": "<div id=\"playaudio4c75bb58-4f53-4b22-a677-2412871f624b\" class=\"play-audio chart-item node jtk-endpoint-anchor jtk-managed jtk-draggable jtk-connected\" style=\"top: 257px; left: 199px;\">\n                <div class=\"play-audio__header d-flex justify-content-between align-content-center\">\n                  <div><i class=\"fa fa-circle\"></i> Play Audio </div>\n                 <a class=\"remove\"> <i style=\"position: relative;top: 4px;\" class=\"fa fa-times-circle \"></i></a>\n                </div>\n                <div class=\"play-audio__body\">  \n                    Initiate a call to a list of phone numbers or endpoints\n                </div>\n              </div>"
+  }]
+}

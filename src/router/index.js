@@ -4,6 +4,8 @@ import Router from 'vue-router'
 
 // DragToWorkplace
 import Main from '@/views/main'
+import Load from '@/views/loadChart'
+
 
 
 
@@ -17,6 +19,11 @@ export default new Router({
       name: 'main',
       component: Main
     },
-    
+    {
+      path: '/load',
+      name: 'load',
+      component: Load
+    },
+  
   ]
 })

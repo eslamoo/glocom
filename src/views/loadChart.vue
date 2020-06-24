@@ -22,6 +22,8 @@
             </div>
           </div>
           <button class="btn btn-success d-block text-center mt-2" id="save">Save</button>
+          <button class="btn btn-success d-block text-center mt-2" id="clear">Clear</button>
+          <button class="btn btn-success d-block text-center mt-2" id="load">Load</button>
         </div>
       </div>
     </aside>
@@ -50,10 +52,9 @@
   import VueSweetalert2 from 'vue-sweetalert2';
   import 'sweetalert2/dist/sweetalert2.min.css';
   Vue.use(VueSweetalert2);
-  /*
-  or for SSR:
-  import Notifications from 'vue-notification/dist/ssr.js'
-  */
+
+  // import jsonn from './data.json'
+  import axios from 'axios'
   Vue.use(Notifications)
   import {
     v4 as uuidv4
@@ -63,7 +64,9 @@
     data() {
       return {
         list: ["circle", "diamond", "ellipse", "rectangle"],
-        uuid: uuidv4()
+        uuid: uuidv4(),
+        nodes: null
+
       };
     },
     mounted() {
@@ -189,6 +192,8 @@
             ]
           ]
         };
+
+
 
         let init = function (connection) {
           // console.log(connection);
@@ -375,72 +380,272 @@
           }
         });
         jsPlumb.fire("jsPlumbDemoLoaded", instance);
+        $('#clear').on('click', function () {
+          jsPlumb.reset();
+          $('.workplace').empty();
 
-     
-
-
-
-        $('#save').on('click', function () {
-          console.log(instance.getAllConnections());
-
-          var nodes = []
-
-          $(".workplace .node").each(function (idx, elem) {
-            var $elem = $(elem);
-            var endpoints = instance.getEndpoints($elem.attr('id'));
-            nodes.push({
-              id: $elem.attr('id'),
-              html: $elem[0].outerHTML,
-              positionX: parseInt($elem.css("left"), 10),
-              positionY: parseInt($elem.css("top"), 10)
-            });
-
-          });
-          var connections = [];
-          $.each(instance.getAllConnections(), function (idx, connection) {
-
-
-            connections.push({
-              connectionId: connection.id,
-              sourceId: connection.sourceId,
-              targetId: connection.targetId,
-              sourceEndpointUuid: connection.endpoints[0].getUuid(),
-              targetEndpointUuid: connection.endpoints[1].getUuid(),
-
-              anchors: $.map(connection.endpoints, function (endpoint) {
-
-                return [
-                  [endpoint.anchor.x,
-                    endpoint.anchor.y,
-                    endpoint.anchor.orientation[0],
-                    endpoint.anchor.orientation[1],
-                    endpoint.anchor.offsets[0],
-                    endpoint.anchor.offsets[1]
-                  ]
-                ];
-
-              })
-            });
-          });
-
-          var flowChart = {};
-          flowChart.nodes = nodes;
-          flowChart.connections = connections;
-          console.log(JSON.stringify(flowChart));
-          // console.log(flowChart);
         });
-        // $('#save').on('click', function() {
+        $('#save').on('click', function () {
+          var obj = jsPlumb.save({
+            selector: ".node"
+          });
+          console.log(JSON.stringify(obj));
+
+        });
+        $('#load').on('click', function () {
+          axios.get('static/json/data.json').then(function (response) {
+              //Clear jsPlumb memory of connections/connectors & endpoints
+              jsPlumb.reset();
+
+              //Clear DOM
+              $("#workplace").empty();
+
+              // jsPlumb.load({savedObj:JSON.parse(JSON.stringify(response.data)),containerSelector:"#woekplace"});
+              var b = response.data.blocks
+              var c = response.data.connections
+              for (var i = 0; i < b.length; i++) {
+                var o = b[i];
+                if ($("#" + o.id).length == 0) {
+                  var elem = $("<div/>");
+                  // elem.attr('id', o.id);
+                  elem.children().css({
+                    left: o.left,
+                    top: o.top,
+                    width: o.width,
+                    height: o.height,
+                    position: 'absolute'
+                  });
+                  elem.html(o.html);
+                  // elem.attr({
+                  //   'class': 'node'
+                  // });
+                  $('#workplace').append(elem);
+                } else {
+                  $("#" + o.id).css({
+                    left: o.left,
+                    top: o.top,
+                    width: o.width,
+                    height: o.height
+                  });
+                }
+              }
+              instance.draggable($(".node"));
+
+              $.each(c, function (index, elem) {
+                console.log(elem.sourceId);
+
+                var connection1 = jsPlumb.connect({
+                  source: elem.sourceId,
+                  target: elem.targetId,
+                  anchors: elem.anchors
+                });
+                console.log(jsPlumb.connect);
+              })
+
+              // for (var i = 0; i < c.length; i++) {
+              //   console.log(c[i].sourceEndpointUuid);
+
+              //   var connection1 = instance.connect({
+              //     source: c[i].sourceEndpointUuid,
+              //     target: c[i].targetEndpointUuid,
+              //     anchors: function () {
+              //       var temp = [];
+              //       c[i].anchors.forEach(function (anc) {
+              //         if (anc.type) {
+              //           temp.push(anc.type);
+              //         } else {
+              //           var x = anc.x;
+              //           var y = anc.y;
+              //           var arr = [x, y].concat(anc.orientation).concat(anc.offset);
+              //           temp.push(arr);
+              //         }
+              //       });
+              //       return temp;
+              //     }(),
+              //     paintStyle: c[i].paintStyle,
+              //     hoverPaintStyle: c[i].hoverPaintStyle,
+              //     endpointStyles: c[i].endpointStyle,
+              //     endpoints: c[i].endpoint,
+              //     connector: [c[i].connectorType, c[i].connectorAttr],
+              //     labelStyle: {
+              //       cssClass: c[i].labelClassName
+              //     }
+              //   });
+              //   c[i].overlays.forEach(function (overlay) {
+              //     connection1.addOverlay([overlay.type, overlay]);
+              //   });
+              // }
 
 
-        //   var uuid, index=0; // Array to store the endpoint sets.
-        // instance.bind("connection", function(ci) {
-        //     var eps = ci.connection.endpoints;
-        //     console.log(eps[0].getUuid() +"->"+ eps[1].getUuid()); // store this information in 2d-Array or any other format you wish
-        //     uuid[index][0]=eps[0].getUuid(); // source endpoint id
-        //     uuid[index++][1]=eps[1].getUuid(); // target endpoint id
-        //     console.log(JSON.stringify(eps));
-        // });
-        // });
+              // console.log(response.data);
+            })
+            .catch(function (error) {
+              // handle error
+              console.log(error);
+            })
+
+
+        });
+        (function (jsPlumbInstance) {
+          jsPlumbInstance.load = function (options, plumbInstance) {
+            if (!options || !options.savedObj || !options.containerSelector) {
+              return;
+            }
+            var conn = options.savedObj;
+            plumbInstance = instance || jsPlumb;
+            var blocks = conn.blocks;
+
+            var o = blocks;
+            if ($("#" + o.id).length == 0) {
+              var elem = $("<div/>");
+              elem.attr('id', o.id);
+              elem.css({
+                left: o.left,
+                top: o.top,
+                width: o.width,
+                height: o.height,
+                position: 'absolute'
+              });
+              elem.html(o.html);
+              elem.attr({
+                'class': 'window'
+              });
+              $(options.containerSelector).append(elem);
+            } else {
+              $("#" + o.id).css({
+                left: o.left,
+                top: o.top,
+                width: o.width,
+                height: o.height
+              });
+            }
+
+            var connections = conn.connections;
+
+            console.log(connections.endpoint);
+
+            var connection1 = jsPlumb.connect({
+              source: connections.sourceId,
+              target: connections.targetId,
+              // anchors: function () {
+              //   var temp = [];
+              //   connections.anchors(function (anc) {
+              //     if (anc.type) {
+              //       temp.push(anc.type);
+              //     } else {
+              //       var x = anc.x;
+              //       var y = anc.y;
+              //       var arr = [x, y].concat(anc.orientation).concat(anc.offset);
+              //       temp.push(arr);
+              //     }
+              //   });
+              //   return temp;
+              // }(),
+              paintStyle: connections.paintStyle,
+              hoverPaintStyle: connections.hoverPaintStyle,
+              endpointStyles: connections.endpointStyle,
+              endpoints: connections.endpoint,
+              connector: [connections.connectorType, connections.connectorAttr],
+              labelStyle: {
+                cssClass: connections.labelClassName
+              }
+            });
+            // connections.overlays.forEach(function (overlay) {
+            //   connection1.addOverlay([overlay.type, overlay]);
+            // });
+
+            plumbInstance.draggable(plumbInstance.getSelector(options.savedObj.selector), {
+              drag: function () {}
+            });
+          };
+
+
+          jsPlumbInstance.save = function (options, plumbInstance) {
+            if (!options || !options.selector) {
+              return {};
+            }
+            plumbInstance = plumbInstance || jsPlumb;
+            var connection;
+            connection = plumbInstance.getAllConnections();
+            var blocks = [];
+            $(options.selector).each(function (idx, elem) {
+              var $elem = $(elem);
+              var id = $elem.attr('id');
+              blocks.push({
+                id: $elem.attr('id'),
+                left: parseInt($elem.css("left"), 10),
+                top: parseInt($elem.css("top"), 10),
+                width: parseInt($elem.css("width"), 10),
+                heigth: parseInt($elem.css("heigth"), 10),
+                html: $elem[0].outerHTML,
+              });
+            });
+
+            var connections = [];
+            $.each(instance.getAllConnections(), function (idx, connection) {
+
+
+              connections.push({
+
+                connectionId: connection.id,
+                sourceId: connection.sourceId,
+                targetId: connection.targetId,
+                sourceEndpointUuid: connection.endpoints[0].getUuid(),
+                targetEndpointUuid: connection.endpoints[1].getUuid(),
+                paintStyle: connection.getPaintStyle(),
+                endpointStyle: function () {
+                  var temp = [];
+                  connection.endpoints.forEach(function (endpoint) {
+                    temp.push(endpoint.getPaintStyle());
+                  });
+                  return temp;
+                }(),
+                hoverPaintStyle: connection.getHoverPaintStyle(),
+                anchors: $.map(connection.endpoints, function (endpoint) {
+
+                  return [
+                    [endpoint.anchor.x,
+                      endpoint.anchor.y,
+                      endpoint.anchor.orientation[0],
+                      endpoint.anchor.orientation[1],
+                      endpoint.anchor.offsets[0],
+                      endpoint.anchor.offsets[1]
+                    ]
+                  ];
+
+                }),
+                labelText: connection.getLabel(),
+                overlays: $.map(connection.getOverlays(), function (overlay) {
+                  var temp = new Array();
+                  var obj = {};
+                  for (var key in overlay) {
+                    if (typeof overlay[key] !== 'function' && typeof overlay[key] !== 'object' &&
+                      typeof overlay[key] != 'undefined') {
+                      if (key == 'loc') {
+                        obj["location"] = overlay[key];
+                      } else {
+                        obj[key] = overlay[key];
+                      }
+                    }
+                  }
+                  obj["cssClass"] = overlay.canvas.className;
+                  temp.push(obj);
+                  return temp;
+                })
+              });
+            });
+            console.log(connections);
+
+
+            var obj = {
+              selector: options.selector,
+              connections: connections,
+              blocks: blocks
+            };
+            return obj;
+          };
+
+        })(jsPlumb);
 
       });
     },

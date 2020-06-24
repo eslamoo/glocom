@@ -22,6 +22,12 @@ import 'jsplumb/css/jsplumbtoolkit-defaults.css';
 // html2canvas
 import html2canvas from 'html2canvas';
 
+import { v4 as uuidv4 } from 'uuid';
+Vue.use(uuidv4);
+
+
+import Notifications from 'vue-notification'
+Vue.use(Notifications)
 
 
 Vue.config.productionTip = false
