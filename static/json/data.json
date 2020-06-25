@@ -1,11 +1,138 @@
 {
   "selector": ".node",
   "connections": [{
-    "connectionId": "con_18",
+    "segment": [{
+      "params": {
+        "x1": 0,
+        "y1": 27,
+        "x2": 0,
+        "y2": 62
+      },
+      "type": "Straight"
+    }, {
+      "params": {
+        "r": 5,
+        "x1": 0,
+        "y1": 62,
+        "x2": 5,
+        "y2": 67,
+        "cx": 5,
+        "cy": 62,
+        "ac": true
+      },
+      "radius": 5,
+      "anticlockwise": true,
+      "type": "Arc",
+      "startAngle": 3.141592653589793,
+      "endAngle": 1.5707963267948966,
+      "x1": 0,
+      "y1": 62,
+      "x2": 5,
+      "y2": 67,
+      "sweep": 1.5707963267948966
+    }, {
+      "params": {
+        "x1": 5,
+        "y1": 67,
+        "x2": 164.75,
+        "y2": 67
+      },
+      "type": "Straight"
+    }, {
+      "params": {
+        "r": 5,
+        "x1": 164.75,
+        "y1": 67,
+        "x2": 169.75,
+        "y2": 62,
+        "cx": 164.75,
+        "cy": 62,
+        "ac": true
+      },
+      "radius": 5,
+      "anticlockwise": true,
+      "type": "Arc",
+      "startAngle": 1.5707963267948966,
+      "endAngle": 0,
+      "x1": 164.75,
+      "y1": 67,
+      "x2": 169.75,
+      "y2": 62,
+      "sweep": 1.5707963267948966
+    }, {
+      "params": {
+        "x1": 169.75,
+        "y1": 62,
+        "x2": 169.75,
+        "y2": -6
+      },
+      "type": "Straight"
+    }, {
+      "params": {
+        "r": 5,
+        "x1": 169.75,
+        "y1": -6,
+        "x2": 174.75,
+        "y2": -11,
+        "cx": 174.75,
+        "cy": -6,
+        "ac": false
+      },
+      "radius": 5,
+      "anticlockwise": false,
+      "type": "Arc",
+      "startAngle": 3.141592653589793,
+      "endAngle": 4.71238898038469,
+      "x1": 169.75,
+      "y1": -6,
+      "x2": 174.75,
+      "y2": -11,
+      "sweep": 1.5707963267948966
+    }, {
+      "params": {
+        "x1": 174.75,
+        "y1": -11,
+        "x2": 334.5,
+        "y2": -11
+      },
+      "type": "Straight"
+    }, {
+      "params": {
+        "r": 5,
+        "x1": 334.5,
+        "y1": -11,
+        "x2": 339.5,
+        "y2": -6,
+        "cx": 334.5,
+        "cy": -6,
+        "ac": false
+      },
+      "radius": 5,
+      "anticlockwise": false,
+      "type": "Arc",
+      "startAngle": 4.71238898038469,
+      "endAngle": 0,
+      "x1": 334.5,
+      "y1": -11,
+      "x2": 339.5,
+      "y2": -6,
+      "sweep": 1.5707963267948966
+    }, {
+      "params": {
+        "x1": 339.5,
+        "y1": -6,
+        "x2": 339.5,
+        "y2": -1
+      },
+      "type": "Straight"
+    }],
+    "connectorType": "Flowchart",
+    "connectorAttr": {},
+    "connectionId": "con_16",
     "sourceId": "start",
-    "targetId": "initcallf2f848c7-2a17-49db-bf88-2ac6b417a34e",
+    "targetId": "initcall014746ca-a2f7-4c25-a7e3-ebef608acfe9",
     "sourceEndpointUuid": "startBottomRight",
-    "targetEndpointUuid": "initcallf2f848c7-2a17-49db-bf88-2ac6b417a34eTopCenter",
+    "targetEndpointUuid": "initcall014746ca-a2f7-4c25-a7e3-ebef608acfe9TopCenter",
     "paintStyle": {
       "strokeWidth": 1,
       "stroke": "#111",
@@ -29,18 +156,208 @@
       "outlineStroke": "white",
       "outlineWidth": 5
     },
-    "anchors": [
-      [1, 1, 0, 1, 0, 0],
-      [0.5, 0, 0, -1, 0, 0]
+    "endpoint": [
+      ["Rectangle", {
+        "anchor": {
+          "x": 1,
+          "y": 1,
+          "elementId": "start",
+          "cssClass": "",
+          "userDefinedLocation": null,
+          "orientation": [0, 1],
+          "lastReturnValue": [295, 164, 1, 1],
+          "offsets": [0, 0],
+          "timestamp": "1593105079254",
+          "_listeners": {
+            "anchorChanged": [null]
+          },
+          "eventsSuspended": false,
+          "tick": false,
+          "eventsToDieOn": {
+            "ready": true
+          },
+          "queue": [],
+          "id": "anchor_1",
+          "type": "BottomRight"
+        }
+      }],
+      ["Dot", {
+        "anchor": {
+          "x": 0.5,
+          "y": 0,
+          "elementId": "initcall014746ca-a2f7-4c25-a7e3-ebef608acfe9",
+          "cssClass": "",
+          "userDefinedLocation": null,
+          "orientation": [0, -1],
+          "lastReturnValue": [634.5, 138, 0.5, 0],
+          "offsets": [0, 0],
+          "timestamp": "1593105079254",
+          "_listeners": {
+            "anchorChanged": [null]
+          },
+          "eventsSuspended": false,
+          "tick": false,
+          "eventsToDieOn": {
+            "ready": true
+          },
+          "queue": [],
+          "id": "anchor_11",
+          "type": "TopCenter"
+        }
+      }]
     ],
+    "anchors": [{
+      "uuid": "startBottomRight",
+      "x": 1,
+      "y": 1,
+      "orientation": [0, 1],
+      "offset": [0, 0],
+      "parameters": {},
+      "type": "BottomRight"
+    }, {
+      "uuid": "initcall014746ca-a2f7-4c25-a7e3-ebef608acfe9TopCenter",
+      "x": 0.5,
+      "y": 0,
+      "orientation": [0, -1],
+      "offset": [0, 0],
+      "parameters": {},
+      "type": "TopCenter"
+    }],
     "labelText": null,
     "overlays": []
   }, {
+    "segment": [{
+      "params": {
+        "x1": 305.5,
+        "y1": 1,
+        "x2": 305.5,
+        "y2": 36
+      },
+      "type": "Straight"
+    }, {
+      "params": {
+        "r": 5,
+        "x1": 305.5,
+        "y1": 36,
+        "x2": 300.5,
+        "y2": 41,
+        "cx": 300.5,
+        "cy": 36,
+        "ac": false
+      },
+      "radius": 5,
+      "anticlockwise": false,
+      "type": "Arc",
+      "startAngle": 0,
+      "endAngle": 1.5707963267948966,
+      "x1": 305.5,
+      "y1": 36,
+      "x2": 300.5,
+      "y2": 41,
+      "sweep": 1.5707963267948966
+    }, {
+      "params": {
+        "x1": 300.5,
+        "y1": 41,
+        "x2": 157.75,
+        "y2": 41
+      },
+      "type": "Straight"
+    }, {
+      "params": {
+        "r": 5,
+        "x1": 157.75,
+        "y1": 41,
+        "x2": 152.75,
+        "y2": 36,
+        "cx": 157.75,
+        "cy": 36,
+        "ac": false
+      },
+      "radius": 5,
+      "anticlockwise": false,
+      "type": "Arc",
+      "startAngle": 1.5707963267948966,
+      "endAngle": 3.141592653589793,
+      "x1": 157.75,
+      "y1": 41,
+      "x2": 152.75,
+      "y2": 36,
+      "sweep": 1.5707963267948966
+    }, {
+      "params": {
+        "x1": 152.75,
+        "y1": 36,
+        "x2": 152.75,
+        "y2": 24
+      },
+      "type": "Straight"
+    }, {
+      "params": {
+        "r": 5,
+        "x1": 152.75,
+        "y1": 24,
+        "x2": 147.75,
+        "y2": 19,
+        "cx": 147.75,
+        "cy": 24,
+        "ac": true
+      },
+      "radius": 5,
+      "anticlockwise": true,
+      "type": "Arc",
+      "startAngle": 0,
+      "endAngle": 4.71238898038469,
+      "x1": 152.75,
+      "y1": 24,
+      "x2": 147.75,
+      "y2": 19,
+      "sweep": 1.5707963267948966
+    }, {
+      "params": {
+        "x1": 147.75,
+        "y1": 19,
+        "x2": 5,
+        "y2": 19
+      },
+      "type": "Straight"
+    }, {
+      "params": {
+        "r": 5,
+        "x1": 5,
+        "y1": 19,
+        "x2": 0,
+        "y2": 24,
+        "cx": 5,
+        "cy": 24,
+        "ac": true
+      },
+      "radius": 5,
+      "anticlockwise": true,
+      "type": "Arc",
+      "startAngle": 4.71238898038469,
+      "endAngle": 3.141592653589793,
+      "x1": 5,
+      "y1": 19,
+      "x2": 0,
+      "y2": 24,
+      "sweep": 1.5707963267948966
+    }, {
+      "params": {
+        "x1": 0,
+        "y1": 24,
+        "x2": 0,
+        "y2": 29
+      },
+      "type": "Straight"
+    }],
+    "connectorType": "Flowchart",
+    "connectorAttr": {},
     "connectionId": "con_22",
-    "sourceId": "initcallf2f848c7-2a17-49db-bf88-2ac6b417a34e",
-    "targetId": "playaudio4c75bb58-4f53-4b22-a677-2412871f624b",
-    "sourceEndpointUuid": "initcallf2f848c7-2a17-49db-bf88-2ac6b417a34eBottomLeft",
-    "targetEndpointUuid": "playaudio4c75bb58-4f53-4b22-a677-2412871f624bTopCenter",
+    "sourceId": "initcall014746ca-a2f7-4c25-a7e3-ebef608acfe9",
+    "targetId": "playaudio7344ab88-6cd7-4394-a10e-d0933c8fba73",
+    "sourceEndpointUuid": "initcall014746ca-a2f7-4c25-a7e3-ebef608acfe9BottomLeft",
+    "targetEndpointUuid": "playaudio7344ab88-6cd7-4394-a10e-d0933c8fba73TopCenter",
     "paintStyle": {
       "strokeWidth": 1,
       "stroke": "#111",
@@ -64,10 +381,73 @@
       "outlineStroke": "white",
       "outlineWidth": 5
     },
-    "anchors": [
-      [0, 1, 0, 1, 0, 0],
-      [0.5, 0, 0, -1, 0, 0]
+    "endpoint": [
+      ["Rectangle", {
+        "anchor": {
+          "x": 0,
+          "y": 1,
+          "elementId": "initcall014746ca-a2f7-4c25-a7e3-ebef608acfe9",
+          "cssClass": "",
+          "userDefinedLocation": null,
+          "orientation": [0, 1],
+          "lastReturnValue": [497, 282, 0, 1],
+          "offsets": [0, 0],
+          "timestamp": "1593105079328",
+          "_listeners": {
+            "anchorChanged": [null]
+          },
+          "eventsSuspended": false,
+          "tick": false,
+          "eventsToDieOn": {
+            "ready": true
+          },
+          "queue": [],
+          "id": "anchor_9",
+          "type": "BottomLeft"
+        }
+      }],
+      ["Dot", {
+        "anchor": {
+          "x": 0.5,
+          "y": 0,
+          "elementId": "playaudio7344ab88-6cd7-4394-a10e-d0933c8fba73",
+          "cssClass": "",
+          "userDefinedLocation": null,
+          "orientation": [0, -1],
+          "lastReturnValue": [191.5, 312, 0.5, 0],
+          "offsets": [0, 0],
+          "timestamp": "1593105080563",
+          "_listeners": {
+            "anchorChanged": [null]
+          },
+          "eventsSuspended": false,
+          "tick": false,
+          "eventsToDieOn": {
+            "ready": true
+          },
+          "queue": [],
+          "id": "anchor_17",
+          "type": "TopCenter"
+        }
+      }]
     ],
+    "anchors": [{
+      "uuid": "initcall014746ca-a2f7-4c25-a7e3-ebef608acfe9BottomLeft",
+      "x": 0,
+      "y": 1,
+      "orientation": [0, 1],
+      "offset": [0, 0],
+      "parameters": {},
+      "type": "BottomLeft"
+    }, {
+      "uuid": "playaudio7344ab88-6cd7-4394-a10e-d0933c8fba73TopCenter",
+      "x": 0.5,
+      "y": 0,
+      "orientation": [0, -1],
+      "offset": [0, 0],
+      "parameters": {},
+      "type": "TopCenter"
+    }],
     "labelText": null,
     "overlays": []
   }],
@@ -79,18 +459,18 @@
     "heigth": null,
     "html": "<div id=\"start\" class=\"start-call chart-item position-absolute node jtk-managed jtk-draggable jtk-endpoint-anchor jtk-connected\"><div class=\"start-call__header d-flex justify-content-between align-content-center\"><div><i class=\"fa fa-circle\"></i> Start</div></div> <div class=\"start-call__body\">\n          PHLO Execution will start from this node\n        </div> <div class=\"start-call__footer d-flex justify-content-between\"><div>Incoming SMS</div> <div>Incoming Call</div> <div>API Request</div></div></div>"
   }, {
-    "id": "initcallf2f848c7-2a17-49db-bf88-2ac6b417a34e",
-    "left": 607,
-    "top": 93,
+    "id": "initcall014746ca-a2f7-4c25-a7e3-ebef608acfe9",
+    "left": 497,
+    "top": 138,
     "width": 275,
     "heigth": null,
-    "html": "<div id=\"initcallf2f848c7-2a17-49db-bf88-2ac6b417a34e\" class=\"init-call chart-item node jtk-endpoint-anchor jtk-managed jtk-draggable jtk-connected\" style=\"top: 93px; left: 607px;\">\n                <div class=\"init-call__header d-flex justify-content-between align-content-center\">\n                  <div><i class=\"fa fa-circle\"></i> Initiate Call </div>\n                  <a class=\"remove\"><i style=\"position: relative;top: 4px;\" class=\"fa fa-times-circle \"></i></a>\n                </div>\n                <div class=\"init-call__body\">  \n                    Initiate a call to a list of phone numbers or endpoints\n                </div>\n                <div class=\"init-call__footer d-flex justify-content-between\">\n                  <div>Answered</div>\n                  <div>Faild</div>\n                </div>\n              </div>"
+    "html": "<div id=\"initcall014746ca-a2f7-4c25-a7e3-ebef608acfe9\" class=\"init-call chart-item node jtk-endpoint-anchor jtk-managed jtk-draggable jtk-connected\" style=\"top: 138px; left: 497px;\">\n                <div class=\"init-call__header d-flex justify-content-between align-content-center\">\n                  <div><i class=\"fa fa-circle\"></i> Initiate Call </div>\n                  <a class=\"remove\"><i style=\"position: relative;top: 4px;\" class=\"fa fa-times-circle \"></i></a>\n                </div>\n                <div class=\"init-call__body\">  \n                    Initiate a call to a list of phone numbers or endpoints\n                </div>\n                <div class=\"init-call__footer d-flex justify-content-between\">\n                  <div>Answered</div>\n                  <div>Faild</div>\n                </div>\n              </div>"
   }, {
-    "id": "playaudio4c75bb58-4f53-4b22-a677-2412871f624b",
-    "left": 199,
-    "top": 257,
+    "id": "playaudio7344ab88-6cd7-4394-a10e-d0933c8fba73",
+    "left": 54,
+    "top": 312,
     "width": 275,
     "heigth": null,
-    "html": "<div id=\"playaudio4c75bb58-4f53-4b22-a677-2412871f624b\" class=\"play-audio chart-item node jtk-endpoint-anchor jtk-managed jtk-draggable jtk-connected\" style=\"top: 257px; left: 199px;\">\n                <div class=\"play-audio__header d-flex justify-content-between align-content-center\">\n                  <div><i class=\"fa fa-circle\"></i> Play Audio </div>\n                 <a class=\"remove\"> <i style=\"position: relative;top: 4px;\" class=\"fa fa-times-circle \"></i></a>\n                </div>\n                <div class=\"play-audio__body\">  \n                    Initiate a call to a list of phone numbers or endpoints\n                </div>\n              </div>"
+    "html": "<div id=\"playaudio7344ab88-6cd7-4394-a10e-d0933c8fba73\" class=\"play-audio chart-item node jtk-endpoint-anchor jtk-managed jtk-draggable jtk-connected\" style=\"top: 312px; left: 54px;\">\n                <div class=\"play-audio__header d-flex justify-content-between align-content-center\">\n                  <div><i class=\"fa fa-circle\"></i> Play Audio </div>\n                 <a class=\"remove\"> <i style=\"position: relative;top: 4px;\" class=\"fa fa-times-circle \"></i></a>\n                </div>\n                <div class=\"play-audio__body\">  \n                    Initiate a call to a list of phone numbers or endpoints\n                </div>\n              </div>"
   }]
 }
