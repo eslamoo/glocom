@@ -431,16 +431,24 @@
               }
               instance.draggable($(".node"));
 
-              $.each(c, function (index, elem) {
+              
                 console.log(elem.sourceId);
 
-                var connection1 = jsPlumb.connect({
-                  source: elem.sourceId,
-                  target: elem.targetId,
-                  anchors: elem.anchors
-                });
+                  var connection1 = jsPlumb.connect({
+              source: c.sourceId,
+              target: c.targetId,
+              anchors: c=anchors,
+              paintStyle: c.paintStyle,
+              hoverPaintStyle: c.hoverPaintStyle,
+              endpointStyles: c.endpointStyle,
+              endpoints: c.endpoint,
+              connector: [c.connectorType, c.connectorAttr],
+              labelStyle: {
+                cssClass: c.labelClassName
+              }
+            });
                 console.log(jsPlumb.connect);
-              })
+              
 
               // for (var i = 0; i < c.length; i++) {
               //   console.log(c[i].sourceEndpointUuid);
@@ -527,20 +535,20 @@
             var connection1 = jsPlumb.connect({
               source: connections.sourceId,
               target: connections.targetId,
-              // anchors: function () {
-              //   var temp = [];
-              //   connections.anchors(function (anc) {
-              //     if (anc.type) {
-              //       temp.push(anc.type);
-              //     } else {
-              //       var x = anc.x;
-              //       var y = anc.y;
-              //       var arr = [x, y].concat(anc.orientation).concat(anc.offset);
-              //       temp.push(arr);
-              //     }
-              //   });
-              //   return temp;
-              // }(),
+              anchors: function () {
+                var temp = [];
+                connections.anchors(function (anc) {
+                  if (anc.type) {
+                    temp.push(anc.type);
+                  } else {
+                    var x = anc.x;
+                    var y = anc.y;
+                    var arr = [x, y].concat(anc.orientation).concat(anc.offset);
+                    temp.push(arr);
+                  }
+                });
+                return temp;
+              }(),
               paintStyle: connections.paintStyle,
               hoverPaintStyle: connections.hoverPaintStyle,
               endpointStyles: connections.endpointStyle,
@@ -577,7 +585,7 @@
                 top: parseInt($elem.css("top"), 10),
                 width: parseInt($elem.css("width"), 10),
                 heigth: parseInt($elem.css("heigth"), 10),
-                html: $elem[0].outerHTML,
+                html: $elem.html(),
               });
             });
 

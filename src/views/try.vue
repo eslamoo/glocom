@@ -29,17 +29,19 @@
     </aside>
     <main class="glocom-main__workplace w-100">
       <div class="glocom-main__workplace--board workplace " id="workplace">
-        <div class="start-call chart-item position-absolute node" id="start">
-          <div class="start-call__header d-flex justify-content-between align-content-center">
-            <div><i class="fa fa-circle"></i> Start</div>
-          </div>
-          <div class="start-call__body">
-            PHLO Execution will start from this node
-          </div>
-          <div class="start-call__footer d-flex justify-content-between">
-            <div>Incoming SMS</div>
-            <div>Incoming Call</div>
-            <div>API Request</div>
+        <div id="start" class="chart-item node">
+          <div class="start-call">
+            <div class="start-call__header d-flex justify-content-between align-content-center">
+              <div><i class="fa fa-circle"></i> Start</div>
+            </div>
+            <div class="start-call__body">
+              PHLO Execution will start from this node
+            </div>
+            <div class="start-call__footer d-flex justify-content-between">
+              <div>Incoming SMS</div>
+              <div>Incoming Call</div>
+              <div>API Request</div>
+            </div>
           </div>
         </div>
       </div>
@@ -288,7 +290,9 @@
               cancelButtonColor: '#d33',
               confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
-              instance.remove($(this).parent().parent());
+              console.log($(this).parent().parent());
+
+              instance.remove($(this).parent().parent().parent());
               if (result.value) {
                 Vue.swal(
                   'Deleted!',
@@ -309,12 +313,12 @@
         $(".initiate-call").draggable({
           scope: "plant",
           helper: "clone",
-          containment: $("#work-container"),
+          containment: $("#workplace"),
         });
         $(".playAudio").draggable({
           scope: "plant",
           helper: "clone",
-          containment: $("#work-container"),
+          containment: $("#workplace"),
         });
         $("#workplace").droppable({
           scope: "plant",
@@ -326,7 +330,8 @@
               let id = 'initcall' + uuidv4();
               // console.log(id);
               let html = `
-                <div id="${id}" class="init-call chart-item node">
+                <div id="${id}" class="chart-item node">
+                <div  class="init-call ">
                   <div class="init-call__header d-flex justify-content-between align-content-center">
                     <div><i class="fa fa-circle"></i> Initiate Call </div>
                     <a class="remove"><i style="position: relative;top: 4px;" class="fa fa-times-circle "></i></a>
@@ -337,6 +342,7 @@
                   <div class="init-call__footer d-flex justify-content-between">
                     <div>Answered</div>
                     <div>Faild</div>
+                  </div>
                   </div>
                 </div>`;
               $(this).append(html);
@@ -357,7 +363,8 @@
               let id = 'playaudio' + uuidv4();
               // console.log(id);
               let html = `
-                <div id="${id}" class="play-audio chart-item node">
+                <div id="${id}" class="chart-item node">
+                <div class="play-audio ">
                   <div class="play-audio__header d-flex justify-content-between align-content-center">
                     <div><i class="fa fa-circle"></i> Play Audio </div>
                    <a class="remove"> <i style="position: relative;top: 4px;" class="fa fa-times-circle "></i></a>
@@ -365,6 +372,7 @@
                   <div class="play-audio__body">  
                       Initiate a call to a list of phone numbers or endpoints
                   </div>
+                </div>
                 </div>`;
               $(this).append(html);
               $("#" + id).css({
@@ -395,8 +403,9 @@
               var o = blocks[i];
               if ($("#" + o.id).length == 0) {
                 var elem = $("<div/>");
+                
                 elem.attr('id', o.id);
-                elem.children().css({
+                elem.css({
                   left: o.left,
                   top: o.top,
                   width: o.width,
@@ -405,9 +414,10 @@
                 });
                 elem.html(o.html);
                 elem.attr({
-                  'class': 'window'
+                  'class': 'node'
                 });
                 $(options.containerSelector).append(elem);
+             
               } else {
                 $("#" + o.id).css({
                   left: o.left,
@@ -416,10 +426,27 @@
                   height: o.height
                 });
               }
+                 if (elem.children().hasClass("init-call")) {
+                  addEndpoints(
+                    o.id,
+                    ["BottomRight", "BottomLeft"], ["TopCenter"]
+                  );
+                }
+                if (elem.children().hasClass("play-audio")) {
+                  addEndpoints(
+                    o.id,
+                    [], ["TopCenter"]
+                  );
+                } 
+                if (elem.children().hasClass("start-call")) {
+                  addEndpoints(
+                    o.id,
+                    ["BottomRight", "BottomCenter", "BottomLeft"], []
+                  );
+                }
             }
             var connections = conn.connections;
             for (var i = 0; i < connections.length; i++) {
-              console.log(connections[i].endpoint);
 
               var connection1 = plumbInstance.connect({
                 source: connections[i].sourceId,
@@ -452,12 +479,16 @@
               });
             }
             plumbInstance.draggable(plumbInstance.getSelector(options.savedObj.selector), {
-              drag: function () {}
+              drag: function () {
+                
+              }
             });
           };
 
 
           jsPlumbInstance.save = function (options, plumbInstance) {
+
+
             if (!options || !options.selector) {
               return {};
             }
@@ -466,15 +497,21 @@
             connection = plumbInstance.getAllConnections();
             var blocks = [];
             $(options.selector).each(function (idx, elem) {
+              console.log(elem);
+
               var $elem = $(elem);
+
+
               var id = $elem.attr('id');
+
+
               blocks.push({
                 id: $elem.attr('id'),
                 left: parseInt($elem.css("left"), 10),
                 top: parseInt($elem.css("top"), 10),
                 width: parseInt($elem.css("width"), 10),
                 heigth: parseInt($elem.css("heigth"), 10),
-                html: $elem[0].outerHTML,
+                html: $elem.html(),
               });
             });
             var connections = [];
@@ -568,8 +605,8 @@
                   return temp;
                 })
               });
-              });
-            
+            });
+
 
             var obj = {
               selector: options.selector,
@@ -597,6 +634,13 @@
         });
 
         $('#load').on('click', function () {
+          jsPlumb.reset();
+
+          //Clear DOM
+          $("#workplace").empty();
+          var elem = $("<div/>");
+          elem.attr('id', "workplace");
+          $("#main").append(elem);
           axios.get('static/json/data.json').then(function (response) {
               jsPlumb.load({
                 savedObj: JSON.parse(JSON.stringify(response.data)),
