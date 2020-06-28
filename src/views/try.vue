@@ -272,12 +272,85 @@
 
             }
           })
+        }; 
+        let reAddEndpoints = function (toId, sourceAnchors, targetAnchors) {
+          // console.log(toId, sourceAnchors, targetAnchors);
+          for (var i = 0; i < sourceAnchors.length; i++) {
+            var sourceUUID = toId + sourceAnchors[i];
+            let s0 = jsPlumb.addEndpoint(toId, sourceEndpoint, {
+              anchor: sourceAnchors[i],
+              uuid: sourceUUID,
+            });
+          }
+
+
+          for (var j = 0; j < targetAnchors.length; j++) {
+            var targetUUID = toId + targetAnchors[j];
+            jsPlumb.addEndpoint(toId, targetEndpoint, {
+              anchor: targetAnchors[j],
+              // anchor: 'Continuous',
+              uuid: targetUUID
+            });
+          }
+
+          jsPlumb.bind("beforeDrop", function (connInfo, originalEvent) {
+            String.prototype.includes = function (...args) {
+              return args.filter(str => this.indexOf(str) > -1).length === args.length;
+            };
+            console.log(connInfo.connection.endpoints[0].getUuid() + ' --> ' + connInfo.dropEndpoint
+              .getUuid());
+
+            if (connInfo.connection.endpoints[0].getUuid().includes("start") && connInfo.dropEndpoint
+              .getUuid().includes("playaudio")) {
+              Vue.notify({
+                group: 'foo',
+                // title: 'Important message',
+                text: 'Oops, something went wrong!',
+                type: 'error'
+              })
+              instance.deleteConnection(connInfo.connection)
+            } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomCenter") &&
+              connInfo.dropEndpoint.getUuid().includes("initcall")) {
+              Vue.notify({
+                group: 'foo',
+                // title: 'Important message',
+                text: 'Oops, something went wrong!',
+                type: 'error'
+              })
+              instance.deleteConnection(connInfo.connection)
+            } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomLeft") && connInfo
+              .dropEndpoint.getUuid().includes("initcall")) {
+              Vue.notify({
+                group: 'foo',
+                // title: 'Important message',
+                text: 'Oops, something went wrong!',
+                type: 'error'
+              })
+              instance.deleteConnection(connInfo.connection)
+            } else if (connInfo.connection.endpoints[0].getUuid().includes("initcall", "BottomRight") &&
+              connInfo
+              .dropEndpoint.getUuid().includes("playaudio")) {
+              Vue.notify({
+                group: 'foo',
+                // title: 'Important message',
+                text: 'Oops, something went wrong!',
+                type: 'error'
+              })
+              instance.deleteConnection(connInfo.connection)
+            } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomRight") && connInfo
+              .dropEndpoint.getUuid().includes("initcall")) {
+              init(connInfo.connection);
+            } else {
+              init(connInfo.connection);
+
+            }
+          })
         };
 
         instance.batch(function () {
           instance.bind("click", function (conn, originalEvent) {
             if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
-              instance.deleteConnection(conn);
+              jsPlumb.deleteConnection(conn);
             conn.toggleType("basic");
           });
           $(document).on('click', '.remove', function () {
@@ -403,7 +476,6 @@
               var o = blocks[i];
               if ($("#" + o.id).length == 0) {
                 var elem = $("<div/>");
-                
                 elem.attr('id', o.id);
                 elem.css({
                   left: o.left,
@@ -416,8 +488,28 @@
                 elem.attr({
                   'class': 'node'
                 });
-                $(options.containerSelector).append(elem);
-             
+                $.when($(options.containerSelector).append(elem)).then(function(){
+if (elem.children().hasClass("init-call")) {
+                  reAddEndpoints(
+                    o.id,
+                    ["BottomRight", "BottomLeft"], ["TopCenter"]
+                  );
+                }
+                if (elem.children().hasClass("play-audio")) {
+                  reAddEndpoints(
+                    o.id,
+                    [], ["TopCenter"]
+                  );
+                } 
+                if (elem.children().hasClass("start-call")) {
+                  reAddEndpoints(
+                    o.id,
+                    ["BottomRight", "BottomCenter", "BottomLeft"], []
+                  );
+                }
+                });
+                // $(options.containerSelector).append(elem);
+               
               } else {
                 $("#" + o.id).css({
                   left: o.left,
@@ -426,24 +518,7 @@
                   height: o.height
                 });
               }
-                 if (elem.children().hasClass("init-call")) {
-                  addEndpoints(
-                    o.id,
-                    ["BottomRight", "BottomLeft"], ["TopCenter"]
-                  );
-                }
-                if (elem.children().hasClass("play-audio")) {
-                  addEndpoints(
-                    o.id,
-                    [], ["TopCenter"]
-                  );
-                } 
-                if (elem.children().hasClass("start-call")) {
-                  addEndpoints(
-                    o.id,
-                    ["BottomRight", "BottomCenter", "BottomLeft"], []
-                  );
-                }
+               
             }
             var connections = conn.connections;
             for (var i = 0; i < connections.length; i++) {
@@ -479,9 +554,7 @@
               });
             }
             plumbInstance.draggable(plumbInstance.getSelector(options.savedObj.selector), {
-              drag: function () {
-                
-              }
+              drag: function () {}
             });
           };
 
@@ -497,7 +570,7 @@
             connection = plumbInstance.getAllConnections();
             var blocks = [];
             $(options.selector).each(function (idx, elem) {
-              console.log(elem);
+              
 
               var $elem = $(elem);
 
