@@ -12,7 +12,7 @@
           <!-- <p>Messaging</p> -->
 
           <div class="item mt-2">
-            <div class="glocom-main__aside__content__components--purple initiate-call" id="initCall">
+            <div class="glocom-main__aside__content__components--purple initiate-call " id="initCall">
               <span><i class="fa fa-phone"></i> Initiat Call</span>
             </div>
           </div>
@@ -387,12 +387,12 @@
         $(".initiate-call").draggable({
           scope: "plant",
           helper: "clone",
-          containment: $("#workplace"),
+          containment: $("#work-container"),
         });
         $(".playAudio").draggable({
           scope: "plant",
           helper: "clone",
-          containment: $("#workplace"),
+          containment: $("#work-container"),
         });
         $("#workplace").droppable({
           scope: "plant",
