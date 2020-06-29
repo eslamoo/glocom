@@ -204,7 +204,7 @@
           // console.log(toId, sourceAnchors, targetAnchors);
           for (var i = 0; i < sourceAnchors.length; i++) {
             var sourceUUID = toId + sourceAnchors[i];
-            let s0 = instance.addEndpoint(toId, sourceEndpoint, {
+            let s0 = jsPlumb.addEndpoint(toId, sourceEndpoint, {
               anchor: sourceAnchors[i],
               uuid: sourceUUID,
             });
@@ -213,14 +213,14 @@
 
           for (var j = 0; j < targetAnchors.length; j++) {
             var targetUUID = toId + targetAnchors[j];
-            instance.addEndpoint(toId, targetEndpoint, {
+            jsPlumb.addEndpoint(toId, targetEndpoint, {
               anchor: targetAnchors[j],
               // anchor: 'Continuous',
               uuid: targetUUID
             });
           }
 
-          instance.bind("beforeDrop", function (connInfo, originalEvent) {
+          jsPlumb.bind("beforeDrop", function (connInfo, originalEvent) {
             String.prototype.includes = function (...args) {
               return args.filter(str => this.indexOf(str) > -1).length === args.length;
             };
@@ -235,7 +235,7 @@
                 text: 'Oops, something went wrong!',
                 type: 'error'
               })
-              instance.deleteConnection(connInfo.connection)
+              jsPlumb.deleteConnection(connInfo.connection)
             } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomCenter") &&
               connInfo.dropEndpoint.getUuid().includes("initcall")) {
               Vue.notify({
@@ -244,7 +244,7 @@
                 text: 'Oops, something went wrong!',
                 type: 'error'
               })
-              instance.deleteConnection(connInfo.connection)
+              jsPlumb.deleteConnection(connInfo.connection)
             } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomLeft") && connInfo
               .dropEndpoint.getUuid().includes("initcall")) {
               Vue.notify({
@@ -253,7 +253,7 @@
                 text: 'Oops, something went wrong!',
                 type: 'error'
               })
-              instance.deleteConnection(connInfo.connection)
+              jsPlumb.deleteConnection(connInfo.connection)
             } else if (connInfo.connection.endpoints[0].getUuid().includes("initcall", "BottomRight") &&
               connInfo
               .dropEndpoint.getUuid().includes("playaudio")) {
@@ -263,7 +263,7 @@
                 text: 'Oops, something went wrong!',
                 type: 'error'
               })
-              instance.deleteConnection(connInfo.connection)
+              jsPlumb.deleteConnection(connInfo.connection)
             } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomRight") && connInfo
               .dropEndpoint.getUuid().includes("initcall")) {
               init(connInfo.connection);
@@ -308,7 +308,7 @@
                 text: 'Oops, something went wrong!',
                 type: 'error'
               })
-              instance.deleteConnection(connInfo.connection)
+              jsPlumb.deleteConnection(connInfo.connection)
             } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomCenter") &&
               connInfo.dropEndpoint.getUuid().includes("initcall")) {
               Vue.notify({
@@ -317,7 +317,7 @@
                 text: 'Oops, something went wrong!',
                 type: 'error'
               })
-              instance.deleteConnection(connInfo.connection)
+              jsPlumb.deleteConnection(connInfo.connection)
             } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomLeft") && connInfo
               .dropEndpoint.getUuid().includes("initcall")) {
               Vue.notify({
@@ -326,7 +326,7 @@
                 text: 'Oops, something went wrong!',
                 type: 'error'
               })
-              instance.deleteConnection(connInfo.connection)
+              jsPlumb.deleteConnection(connInfo.connection)
             } else if (connInfo.connection.endpoints[0].getUuid().includes("initcall", "BottomRight") &&
               connInfo
               .dropEndpoint.getUuid().includes("playaudio")) {
@@ -336,7 +336,7 @@
                 text: 'Oops, something went wrong!',
                 type: 'error'
               })
-              instance.deleteConnection(connInfo.connection)
+              jsPlumb.deleteConnection(connInfo.connection)
             } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomRight") && connInfo
               .dropEndpoint.getUuid().includes("initcall")) {
               init(connInfo.connection);
@@ -347,8 +347,8 @@
           })
         };
 
-        instance.batch(function () {
-          instance.bind("click", function (conn, originalEvent) {
+        jsPlumb.batch(function () {
+          jsPlumb.bind("click", function (conn, originalEvent) {
             if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
               jsPlumb.deleteConnection(conn);
             conn.toggleType("basic");
@@ -365,7 +365,8 @@
             }).then((result) => {
               console.log($(this).parent().parent());
 
-              instance.remove($(this).parent().parent().parent());
+              jsPlumb.remove($(this).parent().parent().parent());
+              jsPlumb.remove($(this).parent().parent().parent());
               if (result.value) {
                 Vue.swal(
                   'Deleted!',
@@ -378,7 +379,7 @@
             //other logic goes here...
           });
         });
-        instance.draggable($("#start"));
+        jsPlumb.draggable($("#start"));
         addEndpoints(
           "start",
           ["BottomRight", "BottomCenter", "BottomLeft"], []
@@ -427,7 +428,7 @@
                 id,
                 ["BottomRight", "BottomLeft"], ["TopCenter"]
               );
-              instance.draggable(id, {
+              jsPlumb.draggable(id, {
                 grid: [1, 1]
               });
             }
@@ -456,7 +457,7 @@
                 id,
                 [], ["TopCenter"]
               );
-              instance.draggable(id, {
+              jsPlumb.draggable(id, {
                 grid: [1, 1]
               });
             }
@@ -465,7 +466,7 @@
         jsPlumb.fire("jsPlumbDemoLoaded", instance);
 
         (function (jsPlumbInstance) {
-          jsPlumbInstance.load = function (options, plumbInstance) {
+          jsPlumb.load = function (options, plumbInstance) {
             if (!options || !options.savedObj || !options.containerSelector) {
               return;
             }
@@ -523,7 +524,7 @@ if (elem.children().hasClass("init-call")) {
             var connections = conn.connections;
             for (var i = 0; i < connections.length; i++) {
 
-              var connection1 = plumbInstance.connect({
+              var connection1 = jsPlumb.connect({
                 source: connections[i].sourceId,
                 target: connections[i].targetId,
                 anchors: function () {
@@ -553,13 +554,13 @@ if (elem.children().hasClass("init-call")) {
                 connection1.addOverlay([overlay.type, overlay]);
               });
             }
-            plumbInstance.draggable(plumbInstance.getSelector(options.savedObj.selector), {
+            jsPlumb.draggable(jsPlumb.getSelector(options.savedObj.selector), {
               drag: function () {}
             });
           };
 
 
-          jsPlumbInstance.save = function (options, plumbInstance) {
+          jsPlumb.save = function (options, plumbInstance) {
 
 
             if (!options || !options.selector) {
@@ -567,7 +568,7 @@ if (elem.children().hasClass("init-call")) {
             }
             plumbInstance = plumbInstance || jsPlumb;
             var connection;
-            connection = plumbInstance.getAllConnections();
+            connection = jsPlumb.getAllConnections();
             var blocks = [];
             $(options.selector).each(function (idx, elem) {
               
@@ -588,9 +589,9 @@ if (elem.children().hasClass("init-call")) {
               });
             });
             var connections = [];
-            $.each(instance.getAllConnections(), function (idx, connection) {
+            $.each(jsPlumb.getAllConnections(), function (idx, connection) {
               var id = connection.sourceId;
-              var endpoints = plumbInstance.getEndpoints(connection.sourceId);
+              var endpoints = jsPlumb.getEndpoints(connection.sourceId);
               var connector = connection.getConnector();
               var type = connector.type;
               var attrs = {};
