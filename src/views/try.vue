@@ -1,7 +1,8 @@
 <template>
   <div class="glocom-main d-flex" id="work-container">
     <notifications group="foo" />
-
+    <!-- <call-options ></call-options> -->
+    <slideout-panel></slideout-panel>
     <aside class="glocom-main__aside">
       <div class="glocom-main__aside__content box-card">
         <div class="glocom-main__aside__content--search">
@@ -10,7 +11,6 @@
         <hr>
         <div class="glocom-main__aside__content__components">
           <!-- <p>Messaging</p> -->
-
           <div class="item mt-2">
             <div class="glocom-main__aside__content__components--purple initiate-call " id="initCall">
               <span><i class="fa fa-phone"></i> Initiat Call</span>
@@ -54,7 +54,8 @@
   import VueSweetalert2 from 'vue-sweetalert2';
   import 'sweetalert2/dist/sweetalert2.min.css';
   Vue.use(VueSweetalert2);
-
+  import initCallOptions from '@/components/initCallOptions'
+  Vue.component('call-options', initCallOptions);
   // import jsonn from './data.json'
   import axios from 'axios'
   Vue.use(Notifications)
@@ -67,10 +68,41 @@
       return {
         list: ["circle", "diamond", "ellipse", "rectangle"],
         uuid: uuidv4(),
-
+        callerID: null,
+        calleeID: null
       };
     },
+    components: {
+      initCallOptions
+    },
+    methods: {
+      saveInfo(value) {
+        console.log(value.callerID);
+      },
+      showPanel() {
+        const panel = this.$showPanel({
+          component: "call-options",
+          cssClass: "options",
+          openOn: "right",
+          width: "400",
+          sync: true,
+          keepAlive: true,
+          props: {
+            openOn: "right",
+            nodeUUID: this.nodeID,
+          }
+        });
+        panel.promise
+      .then(result => {
+        console.log(result.callerID);
+        this.calleeID = result.calleeID
+        this.callerID = result.callerID
+        
+      });
+      }
+    },
     mounted() {
+      var self = this;
       jsPlumb.ready(function () {
         let instance = jsPlumb.getInstance({
           // drag options
@@ -193,9 +225,6 @@
             ]
           ]
         };
-
-
-
         let init = function (connection) {
           // console.log(connection);
           connection.getOverlay("label").setLabel("123");
@@ -209,8 +238,6 @@
               uuid: sourceUUID,
             });
           }
-
-
           for (var j = 0; j < targetAnchors.length; j++) {
             var targetUUID = toId + targetAnchors[j];
             jsPlumb.addEndpoint(toId, targetEndpoint, {
@@ -219,14 +246,12 @@
               uuid: targetUUID
             });
           }
-
           jsPlumb.bind("beforeDrop", function (connInfo, originalEvent) {
             String.prototype.includes = function (...args) {
               return args.filter(str => this.indexOf(str) > -1).length === args.length;
             };
             console.log(connInfo.connection.endpoints[0].getUuid() + ' --> ' + connInfo.dropEndpoint
               .getUuid());
-
             if (connInfo.connection.endpoints[0].getUuid().includes("start") && connInfo.dropEndpoint
               .getUuid().includes("playaudio")) {
               Vue.notify({
@@ -269,10 +294,9 @@
               init(connInfo.connection);
             } else {
               init(connInfo.connection);
-
             }
           })
-        }; 
+        };
         let reAddEndpoints = function (toId, sourceAnchors, targetAnchors) {
           // console.log(toId, sourceAnchors, targetAnchors);
           for (var i = 0; i < sourceAnchors.length; i++) {
@@ -282,8 +306,6 @@
               uuid: sourceUUID,
             });
           }
-
-
           for (var j = 0; j < targetAnchors.length; j++) {
             var targetUUID = toId + targetAnchors[j];
             jsPlumb.addEndpoint(toId, targetEndpoint, {
@@ -292,14 +314,12 @@
               uuid: targetUUID
             });
           }
-
           jsPlumb.bind("beforeDrop", function (connInfo, originalEvent) {
             String.prototype.includes = function (...args) {
               return args.filter(str => this.indexOf(str) > -1).length === args.length;
             };
             console.log(connInfo.connection.endpoints[0].getUuid() + ' --> ' + connInfo.dropEndpoint
               .getUuid());
-
             if (connInfo.connection.endpoints[0].getUuid().includes("start") && connInfo.dropEndpoint
               .getUuid().includes("playaudio")) {
               Vue.notify({
@@ -342,11 +362,9 @@
               init(connInfo.connection);
             } else {
               init(connInfo.connection);
-
             }
           })
         };
-
         jsPlumb.batch(function () {
           jsPlumb.bind("click", function (conn, originalEvent) {
             if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
@@ -363,19 +381,16 @@
               cancelButtonColor: '#d33',
               confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
-              console.log($(this).parent().parent());
-
-              jsPlumb.remove($(this).parent().parent().parent());
-              jsPlumb.remove($(this).parent().parent().parent());
+              // console.log($(this).parent().parent());
               if (result.value) {
                 Vue.swal(
                   'Deleted!',
                   ' ',
                   'success'
                 )
+                jsPlumb.remove($(this).parent().parent().parent());
               }
             })
-
             //other logic goes here...
           });
         });
@@ -397,7 +412,8 @@
         $("#workplace").droppable({
           scope: "plant",
           drop: function (ev, ui) {
-            ;
+            console.log(ui);
+            
             // console.log(ev, ui);
             // Detect if initiate call is dropped 
             if (ui.draggable[0].id == 'initCall') {
@@ -423,6 +439,13 @@
               $("#" + id).css({
                 top: ui.position.top - 20 + "px",
                 left: ui.position.left - 200 + "px"
+              });
+              $('#' + id).dblclick(function () {
+                self.showPanel();
+                this.nodeID = id;
+                
+                
+                console.log("Dropped item clicked.");
               });
               addEndpoints(
                 id,
@@ -464,7 +487,6 @@
           }
         });
         jsPlumb.fire("jsPlumbDemoLoaded", instance);
-
         (function (jsPlumbInstance) {
           jsPlumb.load = function (options, plumbInstance) {
             if (!options || !options.savedObj || !options.containerSelector) {
@@ -489,28 +511,27 @@
                 elem.attr({
                   'class': 'node'
                 });
-                $.when($(options.containerSelector).append(elem)).then(function(){
-if (elem.children().hasClass("init-call")) {
-                  reAddEndpoints(
-                    o.id,
-                    ["BottomRight", "BottomLeft"], ["TopCenter"]
-                  );
-                }
-                if (elem.children().hasClass("play-audio")) {
-                  reAddEndpoints(
-                    o.id,
-                    [], ["TopCenter"]
-                  );
-                } 
-                if (elem.children().hasClass("start-call")) {
-                  reAddEndpoints(
-                    o.id,
-                    ["BottomRight", "BottomCenter", "BottomLeft"], []
-                  );
-                }
+                $.when($(options.containerSelector).append(elem)).then(function () {
+                  if (elem.children().hasClass("init-call")) {
+                    reAddEndpoints(
+                      o.id,
+                      ["BottomRight", "BottomLeft"], ["TopCenter"]
+                    );
+                  }
+                  if (elem.children().hasClass("play-audio")) {
+                    reAddEndpoints(
+                      o.id,
+                      [], ["TopCenter"]
+                    );
+                  }
+                  if (elem.children().hasClass("start-call")) {
+                    reAddEndpoints(
+                      o.id,
+                      ["BottomRight", "BottomCenter", "BottomLeft"], []
+                    );
+                  }
                 });
                 // $(options.containerSelector).append(elem);
-               
               } else {
                 $("#" + o.id).css({
                   left: o.left,
@@ -519,11 +540,9 @@ if (elem.children().hasClass("init-call")) {
                   height: o.height
                 });
               }
-               
             }
             var connections = conn.connections;
             for (var i = 0; i < connections.length; i++) {
-
               var connection1 = jsPlumb.connect({
                 source: connections[i].sourceId,
                 target: connections[i].targetId,
@@ -553,16 +572,17 @@ if (elem.children().hasClass("init-call")) {
               connections[i].overlays.forEach(function (overlay) {
                 connection1.addOverlay([overlay.type, overlay]);
               });
+              // connection1.bind("click", function (conn) {
+              //   if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
+              //     jsPlumb.deleteConnection(conn);
+              //   conn.toggleType("basic");
+              // });
             }
             jsPlumb.draggable(jsPlumb.getSelector(options.savedObj.selector), {
               drag: function () {}
             });
           };
-
-
           jsPlumb.save = function (options, plumbInstance) {
-
-
             if (!options || !options.selector) {
               return {};
             }
@@ -571,14 +591,10 @@ if (elem.children().hasClass("init-call")) {
             connection = jsPlumb.getAllConnections();
             var blocks = [];
             $(options.selector).each(function (idx, elem) {
-              
-
               var $elem = $(elem);
-
-
               var id = $elem.attr('id');
-
-
+              console.log($elem);
+              
               blocks.push({
                 id: $elem.attr('id'),
                 left: parseInt($elem.css("left"), 10),
@@ -586,6 +602,15 @@ if (elem.children().hasClass("init-call")) {
                 width: parseInt($elem.css("width"), 10),
                 heigth: parseInt($elem.css("heigth"), 10),
                 html: $elem.html(),
+                 options: function () {
+                  let options = [];
+                  $elem.each(function () {
+                    if(id.includes('initcall')){
+                      options.push({caller_id: self.callerID, callee_id: self.calleeID})
+                    }
+                  });
+                  return options;
+                }(),
               });
             });
             var connections = [];
@@ -623,7 +648,6 @@ if (elem.children().hasClass("init-call")) {
                 }
                 console.log(options);
               });
-
               connections.push({
                 // path: connector.getPath(),
                 segment: connector.getSegments(),
@@ -680,8 +704,6 @@ if (elem.children().hasClass("init-call")) {
                 })
               });
             });
-
-
             var obj = {
               selector: options.selector,
               connections: connections,
@@ -689,27 +711,20 @@ if (elem.children().hasClass("init-call")) {
             };
             return obj;
           };
-
         })(jsPlumb);
-
-
         $('#clear').on('click', function () {
           jsPlumb.reset();
           jsPlumb.deleteEveryConnection();
           $('.workplace').empty();
-
         });
         $('#save').on('click', function () {
           var obj = jsPlumb.save({
             selector: ".node"
           });
           console.log(JSON.stringify(obj));
-
         });
-
         $('#load').on('click', function () {
           jsPlumb.reset();
-
           //Clear DOM
           $("#workplace").empty();
           var elem = $("<div/>");
@@ -725,22 +740,23 @@ if (elem.children().hasClass("init-call")) {
               // handle error
               console.log(error);
             });
+          jsPlumb.bind("click", function (conn, originalEvent) {
+            if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
+              jsPlumb.deleteConnection(conn);
+            conn.toggleType("basic");
+          });
         });
-
       });
     },
-
   };
 </script>
 <style lang="scss">
   .glocom-main {
     height: 100vh;
-
     &__aside {
       background-color: #f5f7fa;
       padding: 15px;
       width: 250px;
-
       &__content {
         &--search {
           input {
@@ -748,45 +764,38 @@ if (elem.children().hasClass("init-call")) {
             font-size: 12px;
           }
         }
-
         &__components {
           p {
             margin-bottom: 0;
           }
-
           &--blue {
             border: 1px solid #5dbcd2;
             display: block !important;
             text-align: left;
             padding: 7px 20px;
             background-color: #fff;
-
             i {
               color: #5dbcd2;
               margin-right: 10px;
             }
           }
-
           &--purple {
             border: 1px solid #b56adf;
             display: block !important;
             text-align: left;
             padding: 7px 20px;
             background-color: #fff;
-
             i {
               color: #b56adf;
               margin-right: 10px;
             }
           }
-
           &--yellow {
             border: 1px solid #f9c662;
             display: block !important;
             text-align: left;
             padding: 7px 20px;
             background-color: #fff;
-
             i {
               color: #f9c662;
               margin-right: 10px;
@@ -796,28 +805,23 @@ if (elem.children().hasClass("init-call")) {
       }
     }
   }
-
   .playAudio,
   .initiate-call {
     cursor: pointer;
   }
-
   .jtk-endpoint {
     z-index: auto !important;
   }
-
   .start-call {
     width: 275px;
     border: 1px solid #53c251;
     border-radius: 4px;
-
     &__header {
       color: #53c251;
       border-bottom: 1px solid #53c251;
       padding: 5px 15px;
       text-align: left;
     }
-
     &__body {
       color: rgba(52, 58, 64, 0.5);
       font-size: 13px;
@@ -825,31 +829,26 @@ if (elem.children().hasClass("init-call")) {
       height: 80px;
       background-color: #fff;
     }
-
     &__footer {
       font-size: 12px;
       border-top: 1px solid #ddd;
       padding: 0 15px;
       height: 30px;
       line-height: 30px;
-
       div:nth-child(1) {
         border-right: 1px solid #ddd;
         padding-right: 5px;
       }
-
       div:nth-child(3) {
         border-left: 1px solid #ddd;
         padding-left: 5px;
       }
     }
   }
-
   .init-call {
     width: 275px;
     border: 1px solid #b56adf;
     border-radius: 4px;
-
     &__header {
       color: #b56adf;
       border-bottom: 1px solid #b56adf;
@@ -857,7 +856,6 @@ if (elem.children().hasClass("init-call")) {
       text-align: left;
       background-color: #fff;
     }
-
     &__body {
       color: rgba(52, 58, 64, 0.5);
       font-size: 13px;
@@ -865,7 +863,6 @@ if (elem.children().hasClass("init-call")) {
       height: 80px;
       background-color: #fff;
     }
-
     &__footer {
       font-size: 12px;
       border-top: 1px solid #ddd;
@@ -873,24 +870,20 @@ if (elem.children().hasClass("init-call")) {
       height: 30px;
       line-height: 30px;
       background-color: #fff;
-
       div:nth-child(1) {
         border-right: 1px solid #ddd;
         padding-right: 5px;
       }
-
       div:nth-child(3) {
         border-left: 1px solid #ddd;
         padding-left: 5px;
       }
     }
   }
-
   .play-audio {
     width: 275px;
     border: 1px solid #5dbcd2;
     border-radius: 4px;
-
     &__header {
       color: #5dbcd2;
       border-bottom: 1px solid #5dbcd2;
@@ -898,7 +891,6 @@ if (elem.children().hasClass("init-call")) {
       text-align: left;
       background: #fff;
     }
-
     &__body {
       color: rgba(52, 58, 64, 0.5);
       font-size: 13px;
@@ -906,7 +898,6 @@ if (elem.children().hasClass("init-call")) {
       height: 80px;
       background-color: #fff;
     }
-
     &__footer {
       font-size: 12px;
       border-top: 1px solid #ddd;
@@ -914,23 +905,19 @@ if (elem.children().hasClass("init-call")) {
       height: 30px;
       line-height: 30px;
       background-color: #fff;
-
       div:nth-child(1) {
         border-right: 1px solid #ddd;
         padding-right: 5px;
       }
-
       div:nth-child(3) {
         border-left: 1px solid #ddd;
         padding-left: 5px;
       }
     }
   }
-
   .remove {
     cursor: pointer;
   }
-
   .arrowdown {
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
@@ -939,16 +926,13 @@ if (elem.children().hasClass("init-call")) {
     position: absolute;
     z-index: auto;
     top: 1px;
-
     svg {
       opacity: 0;
     }
   }
-
   .jtk-endpoint-anchor {
-    cursor: crosshair;
+    cursor: -webkit-grab;
   }
-
   .workplace {
     width: 100%;
     height: 100%;

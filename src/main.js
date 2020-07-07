@@ -17,8 +17,16 @@ import './style/index.scss';
 import './style/jsplumb-demo.scss';
 // jsplumb
 import 'jsplumb/dist/js/jsplumb.min.js';
-import 'jsplumb/css/jsplumbtoolkit-defaults.css';
+// import '@/js/jsplumb.js';
 
+import 'jsplumb/css/jsplumbtoolkit-defaults.css';
+import SlideOut from '@hyjiacan/vue-slideout'
+import '@hyjiacan/vue-slideout/lib/slideout.css'
+
+// import SlideOut component, and set the defaults props
+Vue.use(SlideOut, {
+  // set props here
+})  
 // html2canvas
 import html2canvas from 'html2canvas';
 
@@ -28,7 +36,9 @@ Vue.use(uuidv4);
 
 import Notifications from 'vue-notification'
 Vue.use(Notifications)
-
+import VueSlideoutPanel from 'vue2-slideout-panel';
+// import * as VueSlideoutPanel  from 'vue2-slideout-panel/dist/vue-slideout-panel';
+Vue.use(VueSlideoutPanel);
 
 Vue.config.productionTip = false
 
