@@ -22,8 +22,6 @@
             </div>
           </div>
           <button class="btn btn-success d-block text-center mt-2" id="save">Save</button>
-          <button class="btn btn-success d-block text-center mt-2" id="clear">Clear</button>
-          <button class="btn btn-success d-block text-center mt-2" id="load">Load</button>
         </div>
       </div>
     </aside>
@@ -43,14 +41,12 @@
   import 'sweetalert2/dist/sweetalert2.min.css';
   Vue.use(VueSweetalert2);
   import initCallOptions from '@/components/initCallOptions'
-  Vue.component('call-options', initCallOptions);
+  Vue.component('call-options', initCallOptions);  
   import audioOptions from '@/components/audioOptions'
   Vue.component('audio-options', audioOptions);
   import axios from 'axios'
   Vue.use(Notifications)
-  import {
-    v4 as uuidv4
-  } from 'uuid';
+  import { v4 as uuidv4 } from 'uuid';
   export default {
     name: "call-flow",
     data() {
@@ -64,24 +60,24 @@
         top: null,
         left: null,
         options: {},
-        connectorPaintStyle: {
+        connectorPaintStyle : {
           strokeWidth: 1,
           stroke: "#111",
           joinstyle: "square",
           outlineStroke: "white",
           outlineWidth: 1,
         },
-        connectorHoverStyle: {
+        connectorHoverStyle : {
           strokeWidth: 3,
           stroke: "#111",
           outlineWidth: 5,
           outlineStroke: "white"
         },
-        endpointHoverStyle: {
+        endpointHoverStyle :{
           fill: "#111",
           stroke: "#111"
         },
-        sourceEndpoint: {
+        sourceEndpoint : {
           endpoint: "Rectangle",
           paintStyle: {
             stroke: "#111",
@@ -94,7 +90,6 @@
             activeClass: "sourceAvtive"
           },
           isSource: true,
-          isTarget: false,
           connector: [
             "Flowchart",
             {
@@ -108,7 +103,7 @@
           hoverPaintStyle: this.endpointHoverStyle,
           connectorHoverStyle: this.connectorHoverStyle,
         },
-        targetEndpoint: {
+        targetEndpoint :{
           endpoint: "Dot",
           paintStyle: {
             fill: "#111",
@@ -121,7 +116,6 @@
             activeClass: "active"
           },
           isTarget: true,
-          isSource: false,
           cssClass: "arrowdown",
           overlays: [
             [
@@ -137,9 +131,7 @@
         }
       };
     },
-    // components: {
-    //   initCallOptions
-    // },
+  
     methods: {
       addStart() {
         let html = `  
@@ -165,76 +157,76 @@
           block.left = window.getComputedStyle(document.getElementById(block.id)).left;
         });
       },
-      addEndpoints(id, sourceAnchors, targetAnchors) {
+           addEndpoints(id, sourceAnchors, targetAnchors){
         this.selectedBlock = this.blocks.find(block => {
           return block.id === id;
         });
-        for (var i = 0; i < sourceAnchors.length; i++) {
-          var sourceUUID = id + sourceAnchors[i];
-          let s0 = jsPlumb.addEndpoint(id, this.sourceEndpoint, {
-            anchor: sourceAnchors[i],
-            uuid: sourceUUID,
-          });
-        }
-        for (var j = 0; j < targetAnchors.length; j++) {
-          var targetUUID = id + targetAnchors[j];
-          jsPlumb.addEndpoint(id, this.targetEndpoint, {
-            anchor: targetAnchors[j],
-            // anchor: 'Continuous',
-            uuid: targetUUID
-          });
-        }
-        jsPlumb.bind("beforeDrop", function (connInfo, originalEvent) {
-          String.prototype.includes = function (...args) {
-            return args.filter(str => this.indexOf(str) > -1).length === args.length;
-          };
-          console.log(connInfo.connection.endpoints[0].getUuid() + ' --> ' + connInfo.dropEndpoint
-            .getUuid());
-          if (connInfo.connection.endpoints[0].getUuid().includes("start") && connInfo.dropEndpoint
-            .getUuid().includes("playaudio")) {
-            Vue.notify({
-              group: 'foo',
-              text: 'Oops, something went wrong!',
-              type: 'error'
-            })
-            jsPlumb.deleteConnection(connInfo.connection)
-          } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomCenter") &&
-            connInfo.dropEndpoint.getUuid().includes("initcall")) {
-            Vue.notify({
-              group: 'foo',
-              text: 'Oops, something went wrong!',
-              type: 'error'
-            })
-            jsPlumb.deleteConnection(connInfo.connection)
-          } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomLeft") && connInfo
-            .dropEndpoint.getUuid().includes("initcall")) {
-            Vue.notify({
-              group: 'foo',
-              text: 'Oops, something went wrong!',
-              type: 'error'
-            })
-            jsPlumb.deleteConnection(connInfo.connection)
-          } else if (connInfo.connection.endpoints[0].getUuid().includes("initcall", "BottomRight") &&
-            connInfo
-            .dropEndpoint.getUuid().includes("playaudio")) {
-            Vue.notify({
-              group: 'foo',
-              text: 'Oops, something went wrong!',
-              type: 'error'
-            })
-            jsPlumb.deleteConnection(connInfo.connection)
-          } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomRight") && connInfo
-            .dropEndpoint.getUuid().includes("initcall")) {
-            init(connInfo.connection);
-          } else {
-            init(connInfo.connection);
+       
+          for (var i = 0; i < sourceAnchors.length; i++) {
+            var sourceUUID = id + sourceAnchors[i];
+            let s0 = jsPlumb.addEndpoint(id, this.sourceEndpoint, {
+              anchor: sourceAnchors[i],
+              uuid: sourceUUID,
+            });
           }
-        })
+          for (var j = 0; j < targetAnchors.length; j++) {
+            var targetUUID = id + targetAnchors[j];
+            jsPlumb.addEndpoint(id, this.targetEndpoint, {
+              anchor: targetAnchors[j],
+              // anchor: 'Continuous',
+              uuid: targetUUID
+            });
+          }
+          jsPlumb.bind("beforeDrop", function (connInfo, originalEvent) {
+            String.prototype.includes = function (...args) {
+              return args.filter(str => this.indexOf(str) > -1).length === args.length;
+            };
+            console.log(connInfo.connection.endpoints[0].getUuid() + ' --> ' + connInfo.dropEndpoint
+              .getUuid());
+            if (connInfo.connection.endpoints[0].getUuid().includes("start") && connInfo.dropEndpoint
+              .getUuid().includes("playaudio")) {
+              Vue.notify({
+                group: 'foo',
+                text: 'Oops, something went wrong!',
+                type: 'error'
+              })
+              jsPlumb.deleteConnection(connInfo.connection)
+            } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomCenter") &&
+              connInfo.dropEndpoint.getUuid().includes("initcall")) {
+              Vue.notify({
+                group: 'foo',
+                text: 'Oops, something went wrong!',
+                type: 'error'
+              })
+              jsPlumb.deleteConnection(connInfo.connection)
+            } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomLeft") && connInfo
+              .dropEndpoint.getUuid().includes("initcall")) {
+              Vue.notify({
+                group: 'foo',
+                text: 'Oops, something went wrong!',
+                type: 'error'
+              })
+              jsPlumb.deleteConnection(connInfo.connection)
+            } else if (connInfo.connection.endpoints[0].getUuid().includes("initcall", "BottomRight") &&
+              connInfo
+              .dropEndpoint.getUuid().includes("playaudio")) {
+              Vue.notify({
+                group: 'foo',
+                text: 'Oops, something went wrong!',
+                type: 'error'
+              })
+              jsPlumb.deleteConnection(connInfo.connection)
+            } else if (connInfo.connection.endpoints[0].getUuid().includes("start", "BottomRight") && connInfo
+              .dropEndpoint.getUuid().includes("initcall")) {
+              init(connInfo.connection);
+            } else {
+              init(connInfo.connection);
+            }
+          })
       },
       deleteBlock(block) {
         this.blocks.splice(this.blocks.indexOf(block), 1);
-        console.log(block);
-        // jsPlumb.remove($('#' + block));
+       
       },
       showCallPanel(id) {
         this.selectedBlock = this.blocks.find(block => {
@@ -260,7 +252,7 @@
               calleeID: result.calleeID
             };
           });
-      },
+      }, 
       showAudioPanel(id) {
         this.selectedBlock = this.blocks.find(block => {
           return block.id === id;
@@ -286,29 +278,6 @@
             };
           });
       },
-      reAddEndpoints(id) {
-        this.blocks.find(block => {
-          if (block.id.includes('initcall')) {
-            console.log('this is call');
-            this.addEndpoints(
-              block.id,
-              ["BottomRight", "BottomLeft"], ["TopCenter"]
-            );
-          }
-          if (block.id.includes("playaudio")) {
-            this.addEndpoints(
-              block.id,
-              [], ["TopCenter"]
-            );
-          }
-          if (block.id === 'start') {
-            this.addEndpoints(
-              block.id,
-              ["BottomRight", "BottomCenter", "BottomLeft"], []
-            );
-          }
-        });
-      },
       addBlock(html, id, top, left, type) {
         if (type === 'call') {
           this.options = {
@@ -333,12 +302,12 @@
     },
     mounted() {
       var self = this;
-      if (localStorage.getItem('reloaded')) {
+     if (localStorage.getItem('reloaded')) {
         localStorage.removeItem('reloaded');
-      } else {
+    } else {
         localStorage.setItem('reloaded', '1');
         location.reload();
-      }
+    }
       jsPlumb.ready(function () {
         let instance = jsPlumb.getInstance({
           DragOptions: {
@@ -347,6 +316,12 @@
           },
           Container: "workplace"
         });
+       
+        let init = function (connection) {
+          connection.getOverlay("label").setLabel("123");
+        };
+  
+       
         jsPlumb.batch(function () {
           jsPlumb.bind("click", function (conn, originalEvent) {
             if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
@@ -370,7 +345,7 @@
                 )
                 let parentID = e.currentTarget.id.substring(7);
                 self.deleteBlock(parentID);
-                jsPlumb.remove($('#' + parentID));
+                 jsPlumb.remove(parentID);
               } else {
                 return false;
               }
@@ -378,9 +353,10 @@
           });
         });
         self.addStart();
+         
         self.$nextTick(function () {
           jsPlumb.draggable($("#start"));
-          self.addEndpoints(
+         self.addEndpoints(
             "start",
             ["BottomRight", "BottomCenter", "BottomLeft"], []
           );
@@ -421,6 +397,7 @@
               this.top = top;
               this.left = left;
               self.addBlock(html, id, top, left, 'call');
+              
               self.$nextTick(function () {
                 self.addEndpoints(
                   id,
@@ -454,15 +431,16 @@
               this.top = top;
               this.left = left;
               self.addBlock(html, id, top, left, 'audio');
+           
               self.$nextTick(function () {
-                self.addEndpoints(
+                   self.addEndpoints(
                   id,
                   [], ["TopCenter"]
                 );
                 jsPlumb.draggable(id, {
                   grid: [1, 1]
                 });
-                $('#' + id).dblclick(function () {
+                  $('#' + id).dblclick(function () {
                   self.showAudioPanel(id);
                 });
               });
@@ -471,227 +449,121 @@
         });
         jsPlumb.fire("jsPlumbDemoLoaded", instance);
         (function (jsPlumbInstance) {
-          self.$nextTick(function () {
-            jsPlumb.load = function (options, plumbInstance) {
-              if (!options || !options.savedObj || !options.containerSelector) {
-                return;
-              }
-              var conn = options.savedObj;
-              plumbInstance = plumbInstance || jsPlumb;
-              var blocks = conn.blocks;
-              // for (var i = 0 ; i < blocks.length; i++) {
-              blocks.forEach(function (o) {
-                self.addBlock(o.html, o.id, o.top, o.left)
-                self.$nextTick(function () {
-                  if (o.id.includes('initcall')) {
-                    console.log('this is call');
-                    $('#' + o.id).dblclick(function () {
-                      self.showCallPanel(o.id);
-                    });
-                    self.addEndpoints(
-                      o.id,
-                      ["BottomRight", "BottomLeft"], ["TopCenter"]
-                    );
-                  }
-                  if (o.id.includes("playaudio")) {
-                    $('#' + o.id).dblclick(function () {
-                      self.showAudioPanel(o.id);
-                    });
-                    self.addEndpoints(
-                      o.id,
-                      [], ["TopCenter"]
-                    );
-                  }
-                  if (o.id === 'start') {
-                    self.addEndpoints(
-                      o.id,
-                      ["BottomRight", "BottomCenter", "BottomLeft"], []
-                    );
-                  }
-                });
-              })
-              self.$nextTick(function () {
-                jsPlumb.draggable($('.node'), {
-                  drag: function () {}
-                });
-              });
-              // }
-              self.$nextTick(function () {
-                var connections = conn.connections;
-                for (var i = 0; i < connections.length; i++) {
-                  var connection1 = jsPlumb.connect({
-                    source: connections[i].sourceId,
-                    target: connections[i].targetId,
-                    anchors: function () {
-                      var temp = [];
-                      connections[i].anchors.forEach(function (anc) {
-                        if (anc.type) {
-                          temp.push(anc.type);
-                        } else {
-                          var x = anc.x;
-                          var y = anc.y;
-                          var arr = [x, y].concat(anc.orientation).concat(anc.offset);
-                          temp.push(arr);
-                        }
-                      });
-                      return temp;
-                    }(),
-                    paintStyle: connections[i].paintStyle,
-                    hoverPaintStyle: connections[i].hoverPaintStyle,
-                    endpointStyles: connections[i].endpointStyle,
-                    endpoints: connections[i].endpoint,
-                    connector: [connections[i].connectorType, connections[i].connectorAttr],
-                    labelStyle: {
-                      cssClass: connections[i].labelClassName
-                    }
-                  });
-                  connections[i].overlays.forEach(function (overlay) {
-                    connection1.addOverlay([overlay.type, overlay]);
-                  });
-                  // connection1.bind("click", function (conn) {
-                  //   if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
-                  //     jsPlumb.deleteConnection(conn);
-                  //   conn.toggleType("basic");
-                  // });
+         
+          jsPlumb.save = function (options, plumbInstance) {
+            if (!options || !options.selector) {
+              return {};
+            }
+            plumbInstance = plumbInstance || jsPlumb;
+            var connection;
+            connection = jsPlumb.getAllConnections();
+            console.log(self.blocks);
+            var connections = [];
+            $.each(jsPlumb.getAllConnections(), function (idx, connection) {
+              var id = connection.sourceId;
+              var endpoints = jsPlumb.getEndpoints(connection.sourceId);
+              var connector = connection.getConnector();
+              var type = connector.type;
+              var attrs = {};
+              switch (type) {
+                case "Bezier":
+                  attrs["curviness"] = connector.getCurviness();
+                  break;
+                case "Straight": {
+                  break;
                 }
-              });
-            };
-            jsPlumb.save = function (options, plumbInstance) {
-              if (!options || !options.selector) {
-                return {};
-              }
-              plumbInstance = plumbInstance || jsPlumb;
-              var connection;
-              connection = jsPlumb.getAllConnections();
-              console.log(self.blocks);
-              var connections = [];
-              $.each(jsPlumb.getAllConnections(), function (idx, connection) {
-                var id = connection.sourceId;
-                var endpoints = jsPlumb.getEndpoints(connection.sourceId);
-                var connector = connection.getConnector();
-                var type = connector.type;
-                var attrs = {};
-                switch (type) {
-                  case "Bezier":
-                    attrs["curviness"] = connector.getCurviness();
-                    break;
-                  case "Straight": {
-                    break;
-                  }
-                  case "Flowchart ": {
-                    break;
-                  }
-                  case "State Machine": {
-                    attrs["curviness"] = connector.getCurviness();
-                    break;
-                  }
+                case "Flowchart ": {
+                  break;
                 }
-                var endpointArray = [];
-                connection.endpoints.forEach(function (endpoint) {
-                  var options = {};
-                  if (endpoint.type == 'Image') {
-                    options.url = endpoint.canvas.src;
-                    options.anchor = endpoint.anchor;
-                    endpointArray.push([endpoint.type, options]);
-                  } else {
-                    options.anchor = endpoint.anchor;
-                    endpointArray.push([endpoint.type, options]);
-                  }
-                  console.log(options);
-                });
-                connections.push({
-                  // path: connector.getPath(),
-                  segment: connector.getSegments(),
-                  connectorType: type,
-                  connectorAttr: attrs,
-                  connectionId: connection.id,
-                  sourceId: connection.sourceId,
-                  targetId: connection.targetId,
-                  sourceEndpointUuid: connection.endpoints[0].getUuid(),
-                  targetEndpointUuid: connection.endpoints[1].getUuid(),
-                  paintStyle: connection.getPaintStyle(),
-                  endpointStyle: function () {
-                    var temp = [];
-                    connection.endpoints.forEach(function (endpoint) {
-                      temp.push(endpoint.getPaintStyle());
-                    });
-                    return temp;
-                  }(),
-                  hoverPaintStyle: connection.getHoverPaintStyle(),
-                  endpoint: endpointArray,
-                  anchors: function () {
-                    var temp = [];
-                    connection.endpoints.forEach(function (endpoint) {
-                      var tempObj = {
-                        uuid: endpoint.getUuid(),
-                        x: endpoint.anchor.x,
-                        y: endpoint.anchor.y,
-                        orientation: endpoint.anchor.orientation,
-                        offset: endpoint.anchor.offsets,
-                        parameters: endpoint.getParameters(),
-                        type: endpoint.anchor.type
-                      };
-                      temp.push(tempObj);
-                    });
-                    return temp;
-                  }(),
-                  labelText: connection.getLabel(),
-                  overlays: $.map(connection.getOverlays(), function (overlay) {
-                    var temp = new Array();
-                    var obj = {};
-                    for (var key in overlay) {
-                      if (typeof overlay[key] !== 'function' && typeof overlay[key] !==
-                        'object' &&
-                        typeof overlay[key] != 'undefined') {
-                        if (key == 'loc') {
-                          obj["location"] = overlay[key];
-                        } else {
-                          obj[key] = overlay[key];
-                        }
+                case "State Machine": {
+                  attrs["curviness"] = connector.getCurviness();
+                  break;
+                }
+              }
+              var endpointArray = [];
+              connection.endpoints.forEach(function (endpoint) {
+                var options = {};
+                if (endpoint.type == 'Image') {
+                  options.url = endpoint.canvas.src;
+                  options.anchor = endpoint.anchor;
+                  endpointArray.push([endpoint.type, options]);
+                } else {
+                  options.anchor = endpoint.anchor;
+                  endpointArray.push([endpoint.type, options]);
+                }
+                console.log(options);
+              });
+              connections.push({
+                // path: connector.getPath(),
+                segment: connector.getSegments(),
+                connectorType: type,
+                connectorAttr: attrs,
+                connectionId: connection.id,
+                sourceId: connection.sourceId,
+                targetId: connection.targetId,
+                sourceEndpointUuid: connection.endpoints[0].getUuid(),
+                targetEndpointUuid: connection.endpoints[1].getUuid(),
+                paintStyle: connection.getPaintStyle(),
+                endpointStyle: function () {
+                  var temp = [];
+                  connection.endpoints.forEach(function (endpoint) {
+                    temp.push(endpoint.getPaintStyle());
+                  });
+                  return temp;
+                }(),
+                hoverPaintStyle: connection.getHoverPaintStyle(),
+                endpoint: endpointArray,
+                anchors: function () {
+                  var temp = [];
+                  connection.endpoints.forEach(function (endpoint) {
+                    var tempObj = {
+                      uuid: endpoint.getUuid(),
+                      x: endpoint.anchor.x,
+                      y: endpoint.anchor.y,
+                      orientation: endpoint.anchor.orientation,
+                      offset: endpoint.anchor.offsets,
+                      parameters: endpoint.getParameters(),
+                      type: endpoint.anchor.type
+                    };
+                    temp.push(tempObj);
+                  });
+                  return temp;
+                }(),
+                labelText: connection.getLabel(),
+                overlays: $.map(connection.getOverlays(), function (overlay) {
+                  var temp = new Array();
+                  var obj = {};
+                  for (var key in overlay) {
+                    if (typeof overlay[key] !== 'function' && typeof overlay[key] !== 'object' &&
+                      typeof overlay[key] != 'undefined') {
+                      if (key == 'loc') {
+                        obj["location"] = overlay[key];
+                      } else {
+                        obj[key] = overlay[key];
                       }
                     }
-                    obj["cssClass"] = overlay.canvas.className;
-                    temp.push(obj);
-                    return temp;
-                  })
-                });
+                  }
+                  obj["cssClass"] = overlay.canvas.className;
+                  temp.push(obj);
+                  return temp;
+                })
               });
-              var obj = {
-                selector: options.selector,
-                connections: connections,
-                blocks: self.blocks
-              };
-              return obj;
+            });
+            var obj = {
+              selector: options.selector,
+              connections: connections,
+              blocks: self.blocks
             };
-          });
+            return obj;
+          };
         })(jsPlumb);
+      
         $('#save').on('click', function () {
           self.computeStyles();
           var obj = jsPlumb.save({
             selector: ".node"
           });
           console.log(JSON.stringify(obj));
-        });
-        $('#load').on('click', function () {
-          jsPlumb.reset();
-          self.blocks = [];
-          //Clear DOM
-          $("#workplace").empty();
-          axios.get('static/json/data.json').then(function (response) {
-              jsPlumb.load({
-                savedObj: JSON.parse(JSON.stringify(response.data)),
-                containerSelector: "#workplace"
-              });
-            })
-            .catch(function (error) {
-              // handle error
-              console.log(error);
-            });
-          jsPlumb.bind("click", function (conn, originalEvent) {
-            if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
-              jsPlumb.deleteConnection(conn);
-            conn.toggleType("basic");
-          });
         });
       });
     },

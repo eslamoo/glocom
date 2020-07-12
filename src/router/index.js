@@ -4,10 +4,11 @@ import Router from 'vue-router'
 
 // DragToWorkplace
 import Main from '@/views/main'
-import Load from '@/views/loadChart'
 import Try from '@/views/try'
 
 
+import Load from '@/views/loadChart'
+import Save from '@/views/saveChart'
 
 
 Vue.use(Router)
@@ -24,6 +25,11 @@ export default new Router({
       path: '/load',
       name: 'load',
       component: Load
+    }, 
+    {
+      path: '/save',
+      name: 'save',
+      component: Save
     }, 
      {
       path: '/try',
