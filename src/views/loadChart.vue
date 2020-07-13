@@ -231,10 +231,15 @@
           }
         })
       },
-      deleteBlock(block) {
-        this.blocks.splice(this.blocks.indexOf(block), 1);
-        console.log(block);
-        // jsPlumb.remove($('#' + block));
+      deleteBlock(id) {
+        for (var i = 0; i < this.blocks.length; i++) {
+          var obj = this.blocks[i];
+          if (id.indexOf(obj.id) !== -1) {
+            this.blocks.splice(i, 1);
+            i--;
+          }
+        }
+        jsPlumb.remove($('#' + id))
       },
       showCallPanel(id) {
         this.selectedBlock = this.blocks.find(block => {
@@ -700,12 +705,10 @@
 <style lang="scss">
   .glocom-main {
     height: 100vh;
-
     &__aside {
       background-color: #f5f7fa;
       padding: 15px;
       width: 250px;
-
       &__content {
         &--search {
           input {
@@ -713,45 +716,38 @@
             font-size: 12px;
           }
         }
-
         &__components {
           p {
             margin-bottom: 0;
           }
-
           &--blue {
             border: 1px solid #5dbcd2;
             display: block !important;
             text-align: left;
             padding: 7px 20px;
             background-color: #fff;
-
             i {
               color: #5dbcd2;
               margin-right: 10px;
             }
           }
-
           &--purple {
             border: 1px solid #b56adf;
             display: block !important;
             text-align: left;
             padding: 7px 20px;
             background-color: #fff;
-
             i {
               color: #b56adf;
               margin-right: 10px;
             }
           }
-
           &--yellow {
             border: 1px solid #f9c662;
             display: block !important;
             text-align: left;
             padding: 7px 20px;
             background-color: #fff;
-
             i {
               color: #f9c662;
               margin-right: 10px;
@@ -761,28 +757,23 @@
       }
     }
   }
-
   .playAudio,
   .initiate-call {
     cursor: pointer;
   }
-
   .jtk-endpoint {
     z-index: auto !important;
   }
-
   .start-call {
     width: 275px;
     border: 1px solid #53c251;
     border-radius: 4px;
-
     &__header {
       color: #53c251;
       border-bottom: 1px solid #53c251;
       padding: 5px 15px;
       text-align: left;
     }
-
     &__body {
       color: rgba(52, 58, 64, 0.5);
       font-size: 13px;
@@ -790,31 +781,26 @@
       height: 80px;
       background-color: #fff;
     }
-
     &__footer {
       font-size: 12px;
       border-top: 1px solid #ddd;
       padding: 0 15px;
       height: 30px;
       line-height: 30px;
-
       div:nth-child(1) {
         border-right: 1px solid #ddd;
         padding-right: 5px;
       }
-
       div:nth-child(3) {
         border-left: 1px solid #ddd;
         padding-left: 5px;
       }
     }
   }
-
   .init-call {
     width: 275px;
     border: 1px solid #b56adf;
     border-radius: 4px;
-
     &__header {
       color: #b56adf;
       border-bottom: 1px solid #b56adf;
@@ -822,7 +808,6 @@
       text-align: left;
       background-color: #fff;
     }
-
     &__body {
       color: rgba(52, 58, 64, 0.5);
       font-size: 13px;
@@ -830,7 +815,6 @@
       height: 80px;
       background-color: #fff;
     }
-
     &__footer {
       font-size: 12px;
       border-top: 1px solid #ddd;
@@ -838,24 +822,20 @@
       height: 30px;
       line-height: 30px;
       background-color: #fff;
-
       div:nth-child(1) {
         border-right: 1px solid #ddd;
         padding-right: 5px;
       }
-
       div:nth-child(3) {
         border-left: 1px solid #ddd;
         padding-left: 5px;
       }
     }
   }
-
   .play-audio {
     width: 275px;
     border: 1px solid #5dbcd2;
     border-radius: 4px;
-
     &__header {
       color: #5dbcd2;
       border-bottom: 1px solid #5dbcd2;
@@ -863,7 +843,6 @@
       text-align: left;
       background: #fff;
     }
-
     &__body {
       color: rgba(52, 58, 64, 0.5);
       font-size: 13px;
@@ -871,7 +850,6 @@
       height: 80px;
       background-color: #fff;
     }
-
     &__footer {
       font-size: 12px;
       border-top: 1px solid #ddd;
@@ -879,23 +857,19 @@
       height: 30px;
       line-height: 30px;
       background-color: #fff;
-
       div:nth-child(1) {
         border-right: 1px solid #ddd;
         padding-right: 5px;
       }
-
       div:nth-child(3) {
         border-left: 1px solid #ddd;
         padding-left: 5px;
       }
     }
   }
-
   .remove {
     cursor: pointer;
   }
-
   .arrowdown {
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
@@ -904,16 +878,13 @@
     position: absolute;
     z-index: auto;
     top: 1px;
-
     svg {
       opacity: 0;
     }
   }
-
   .jtk-endpoint-anchor {
     cursor: -webkit-grab;
   }
-
   .workplace {
     width: 100%;
     height: 100%;
