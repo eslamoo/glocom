@@ -62,8 +62,7 @@
     name: "DragToWorkplace",
     data() {
       return {
-        list: ["circle", "diamond", "ellipse", "rectangle"],
-        uuid: uuidv4()
+   
       };
     },
     mounted() {

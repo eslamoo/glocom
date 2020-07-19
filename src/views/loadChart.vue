@@ -111,7 +111,7 @@
         targetEndpoint: {
           endpoint: "Dot",
           paintStyle: {
-            fill: "#111",
+            fill: "transparent",
             radius: 0
           },
           hoverPaintStyle: this.endpointHoverStyle,
@@ -232,13 +232,18 @@
         })
       },
       deleteBlock(id) {
-        for (var i = 0; i < this.blocks.length; i++) {
-          var obj = this.blocks[i];
-          if (id.indexOf(obj.id) !== -1) {
-            this.blocks.splice(i, 1);
-            i--;
-          }
-        }
+        // for (var i = 0; i < this.blocks.length; i++) {
+        //   var obj = this.blocks[i];
+        //   if (id.indexOf(obj.id) !== -1) {
+        //     this.blocks.splice(i, 1);
+        //     i--;
+        //   }
+        // }
+        let toDelete = this.blocks.find(block => {
+          return block.id === id;
+        });
+
+        this.blocks.splice(this.blocks.indexOf(toDelete), 1);
         jsPlumb.remove($('#' + id))
       },
       showCallPanel(id) {
@@ -314,7 +319,8 @@
           }
         });
       },
-      addBlock(html, id, top, left, type) {
+      addBlock(html, id, top, left, type, options = null) {
+
         if (type === 'call') {
           this.options = {
             callerID: null,
@@ -325,6 +331,11 @@
             sound: null
           }
         }
+
+        if (options){
+          this.options = options
+        }
+
         this.blocks.push({
           id: id,
           left: left,
@@ -332,6 +343,7 @@
           width: parseInt($('#' + id).css("width"), 10),
           heigth: parseInt($('#' + id).css("heigth"), 10),
           html: html,
+          type: type,
           options: this.options
         });
       }
@@ -486,7 +498,8 @@
               var blocks = conn.blocks;
               // for (var i = 0 ; i < blocks.length; i++) {
               blocks.forEach(function (o) {
-                self.addBlock(o.html, o.id, o.top, o.left)
+                self.addBlock(o.html, o.id, o.top, o.left, o.type, o.options)
+                // console.log(o.options.callerID);
                 self.$nextTick(function () {
                   if (o.id.includes('initcall')) {
                     console.log('this is call');
@@ -606,7 +619,7 @@
                 });
                 connections.push({
                   // path: connector.getPath(),
-                  segment: connector.getSegments(),
+                  // segment: connector.getSegments(),
                   connectorType: type,
                   connectorAttr: attrs,
                   connectionId: connection.id,
