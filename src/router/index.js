@@ -9,33 +9,39 @@ import Try from '@/views/try'
 
 import Load from '@/views/loadChart'
 import Save from '@/views/saveChart'
+import Add from '@/views/addEndpoint'
 
 
 Vue.use(Router)
 
 export default new Router({
-  routes: [
- 
-    {
-      path: '/',
-      name: 'main',
-      component: Main
-    },
-    {
-      path: '/load',
-      name: 'load',
-      component: Load
-    }, 
-    {
-      path: '/save',
-      name: 'save',
-      component: Save
-    }, 
-     {
-      path: '/try',
-      name: 'try',
-      component: Try
-    },
-  
-  ]
+    routes: [
+
+        {
+            path: '/',
+            name: 'main',
+            component: Main
+        },
+        {
+            path: '/load',
+            name: 'load',
+            component: Load
+        },
+        {
+            path: '/save',
+            name: 'save',
+            component: Save
+        },
+        {
+            path: '/try',
+            name: 'try',
+            component: Try
+        },
+        {
+            path: '/add',
+            name: 'add',
+            component: Add
+        },
+
+    ]
 })

@@ -9,7 +9,7 @@
       </button>
     </div>
     <div class="call-panel__form">
-      <form @submit="closePanel">
+      <form @submit.prevent="closePanel">
         <div class="form-group">
           <label for="soundName">Sound Name</label>
           <input type="text" v-model="sound.soundName" class="form-control" id="soundName">

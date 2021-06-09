@@ -1,1 +1,338 @@
-{"selector":".node","connections":[{"connectorType":"Flowchart","connectorAttr":{},"connectionId":"con_27","sourceId":"start","targetId":"initcall23d0b84e-9ba0-4a1c-8f81-eedfa8330b6a","sourceEndpointUuid":null,"targetEndpointUuid":null,"paintStyle":{"stroke-width":4,"stroke":"#456"},"endpointStyle":[{"stroke":"#111","fill":"transparent","radius":10,"strokeWidth":1},{"fill":"transparent","radius":0}],"hoverPaintStyle":null,"endpoint":[["Rectangle",{"anchor":{"x":1,"y":1,"elementId":"start","cssClass":"","userDefinedLocation":null,"orientation":[0,1],"lastReturnValue":[295,164,1,1],"offsets":[0,0],"timestamp":"1595109246082","_listeners":{"anchorChanged":[null]},"eventsSuspended":false,"tick":false,"eventsToDieOn":{"ready":true},"queue":[],"id":"anchor_28","type":"BottomRight"}}],["Dot",{"anchor":{"x":0.5,"y":0,"elementId":"initcall23d0b84e-9ba0-4a1c-8f81-eedfa8330b6a","cssClass":"","userDefinedLocation":null,"orientation":[0,-1],"lastReturnValue":[712.5,226,0.5,0],"offsets":[0,0],"timestamp":"1595109259191","_listeners":{"anchorChanged":[null]},"eventsSuspended":false,"tick":false,"eventsToDieOn":{"ready":true},"queue":[],"id":"anchor_30","type":"TopCenter"}}]],"anchors":[{"uuid":null,"x":1,"y":1,"orientation":[0,1],"offset":[0,0],"parameters":{},"type":"BottomRight"},{"uuid":null,"x":0.5,"y":0,"orientation":[0,-1],"offset":[0,0],"parameters":{},"type":"TopCenter"}],"labelText":null,"overlays":[]},{"connectorType":"Flowchart","connectorAttr":{},"connectionId":"con_32","sourceId":"initcall23d0b84e-9ba0-4a1c-8f81-eedfa8330b6a","targetId":"playaudio8ac0d688-523b-4132-bce7-5d5fa1087a6d","sourceEndpointUuid":null,"targetEndpointUuid":null,"paintStyle":{"stroke-width":4,"stroke":"#456"},"endpointStyle":[{"stroke":"#111","fill":"transparent","radius":10,"strokeWidth":1},{"fill":"transparent","radius":0}],"hoverPaintStyle":null,"endpoint":[["Rectangle",{"anchor":{"x":0,"y":1,"elementId":"initcall23d0b84e-9ba0-4a1c-8f81-eedfa8330b6a","cssClass":"","userDefinedLocation":null,"orientation":[0,1],"lastReturnValue":[575,370,0,1],"offsets":[0,0],"timestamp":"1595109259191","_listeners":{"anchorChanged":[null]},"eventsSuspended":false,"tick":false,"eventsToDieOn":{"ready":true},"queue":[],"id":"anchor_33","type":"BottomLeft"}}],["Dot",{"anchor":{"x":0.5,"y":0,"elementId":"playaudio8ac0d688-523b-4132-bce7-5d5fa1087a6d","cssClass":"","userDefinedLocation":null,"orientation":[0,-1],"lastReturnValue":[270.5,426,0.5,0],"offsets":[0,0],"timestamp":"1595109246086","_listeners":{"anchorChanged":[null]},"eventsSuspended":false,"tick":false,"eventsToDieOn":{"ready":true},"queue":[],"id":"anchor_35","type":"TopCenter"}}]],"anchors":[{"uuid":null,"x":0,"y":1,"orientation":[0,1],"offset":[0,0],"parameters":{},"type":"BottomLeft"},{"uuid":null,"x":0.5,"y":0,"orientation":[0,-1],"offset":[0,0],"parameters":{},"type":"TopCenter"}],"labelText":null,"overlays":[]}],"blocks":[{"id":"start","left":"20px","top":"20px","width":null,"heigth":null,"html":"  \n        <div class=\"start-call\">\n          <div class=\"start-call__header d-flex justify-content-between align-content-center\">\n            <div><i class=\"fa fa-circle\"></i> Start</div>\n          </div>\n          <div class=\"start-call__body\">\n            PHLO Execution will start from this node\n          </div>\n          <div class=\"start-call__footer d-flex justify-content-between\">\n            <div>Incoming SMS</div>\n            <div>Incoming Call</div>\n            <div>API Request</div>\n          </div>\n        </div>\n      ","options":{}},{"id":"initcall23d0b84e-9ba0-4a1c-8f81-eedfa8330b6a","left":"575px","top":"226px","width":null,"heigth":null,"html":"\n              <div  class=\"init-call \">\n                <div class=\"init-call__header d-flex justify-content-between align-content-center\">\n                  <div><i class=\"fa fa-circle\"></i> Initiate Call </div>\n                  <a class=\"remove\" id=\"remove-initcall23d0b84e-9ba0-4a1c-8f81-eedfa8330b6a\"><i style=\"position: relative;top: 4px;\" class=\"fa fa-times-circle \"></i></a>\n                </div>\n                <div class=\"init-call__body\">  \n                    Initiate a call to a list of phone numbers or endpoints\n                </div>\n                <div class=\"init-call__footer d-flex justify-content-between\">\n                  <div>Answered</div>\n                  <div>Faild</div>\n                </div>\n                </div>\n              ","options":{"callerID":"cdcdc","calleeID":"cdcdc"}},{"id":"playaudio8ac0d688-523b-4132-bce7-5d5fa1087a6d","left":"133px","top":"426px","width":null,"heigth":null,"html":"\n              <div class=\"play-audio \">\n                <div class=\"play-audio__header d-flex justify-content-between align-content-center\">\n                  <div><i class=\"fa fa-circle\"></i> Play Audio </div>\n                 <a class=\"remove\" id=\"remove-playaudio8ac0d688-523b-4132-bce7-5d5fa1087a6d\"> <i style=\"position: relative;top: 4px;\" class=\"fa fa-times-circle \"></i></a>\n                </div>\n                <div class=\"play-audio__body\">  \n                    Initiate a call to a list of phone numbers or endpoints\n                </div>\n              </div>\n              ","options":{"soundName":"dcdcdcfvdfabg","soundURL":"bgdfzfg"}},{"id":"initcallaccb3993-a401-4bf6-ab11-af955db6813b","left":"573px","top":"466px","width":null,"heigth":null,"html":"\n              <div  class=\"init-call \">\n                <div class=\"init-call__header d-flex justify-content-between align-content-center\">\n                  <div><i class=\"fa fa-circle\"></i> Initiate Call </div>\n                  <a class=\"remove\" id=\"remove-initcallaccb3993-a401-4bf6-ab11-af955db6813b\"><i style=\"position: relative;top: 4px;\" class=\"fa fa-times-circle \"></i></a>\n                </div>\n                <div class=\"init-call__body\">  \n                    Initiate a call to a list of phone numbers or endpoints\n                </div>\n                <div class=\"init-call__footer d-flex justify-content-between\">\n                  <div>Answered</div>\n                  <div>Faild</div>\n                </div>\n                </div>\n              ","options":{"callerID":"vvvvvvvvv","calleeID":"vvvvvvvvvvvvv"}},{"id":"playaudio4b76efea-ab21-41d2-9926-c1b1603b5292","left":"159px","top":"261px","width":null,"heigth":null,"html":"\n              <div class=\"play-audio \">\n                <div class=\"play-audio__header d-flex justify-content-between align-content-center\">\n                  <div><i class=\"fa fa-circle\"></i> Play Audio </div>\n                 <a class=\"remove\" id=\"remove-playaudio4b76efea-ab21-41d2-9926-c1b1603b5292\"> <i style=\"position: relative;top: 4px;\" class=\"fa fa-times-circle \"></i></a>\n                </div>\n                <div class=\"play-audio__body\">  \n                    Initiate a call to a list of phone numbers or endpoints\n                </div>\n              </div>\n              ","options":{"soundName":"deded","soundURL":"deded"}}]}
+{
+    "selector": ".node",
+    "connections": [{
+            "connectorType": "Flowchart",
+            "connectorAttr": {},
+            "connectionId": "con_27",
+            "sourceId": "start",
+            "targetId": "initcall23d0b84e-9ba0-4a1c-8f81-eedfa8330b6a",
+            "sourceEndpointUuid": null,
+            "targetEndpointUuid": null,
+            "paintStyle": {
+                "stroke-width": 4,
+                "stroke": "#456"
+            },
+            "endpointStyle": [{
+                    "stroke": "#111",
+                    "fill": "transparent",
+                    "radius": 10,
+                    "strokeWidth": 1
+                },
+                {
+                    "fill": "transparent",
+                    "radius": 0
+                }
+            ],
+            "hoverPaintStyle": null,
+            "endpoint": [
+                [
+                    "Rectangle",
+                    {
+                        "anchor": {
+                            "x": 1,
+                            "y": 1,
+                            "elementId": "start",
+                            "cssClass": "",
+                            "userDefinedLocation": null,
+                            "orientation": [
+                                0,
+                                1
+                            ],
+                            "lastReturnValue": [
+                                295,
+                                164,
+                                1,
+                                1
+                            ],
+                            "offsets": [
+                                0,
+                                0
+                            ],
+                            "timestamp": "1595109246082",
+                            "_listeners": {
+                                "anchorChanged": [
+                                    null
+                                ]
+                            },
+                            "eventsSuspended": false,
+                            "tick": false,
+                            "eventsToDieOn": {
+                                "ready": true
+                            },
+                            "queue": [],
+                            "id": "anchor_28",
+                            "type": "BottomRight"
+                        }
+                    }
+                ],
+                [
+                    "Dot",
+                    {
+                        "anchor": {
+                            "x": 0.5,
+                            "y": 0,
+                            "elementId": "initcall23d0b84e-9ba0-4a1c-8f81-eedfa8330b6a",
+                            "cssClass": "",
+                            "userDefinedLocation": null,
+                            "orientation": [
+                                0, -1
+                            ],
+                            "lastReturnValue": [
+                                712.5,
+                                226,
+                                0.5,
+                                0
+                            ],
+                            "offsets": [
+                                0,
+                                0
+                            ],
+                            "timestamp": "1595109259191",
+                            "_listeners": {
+                                "anchorChanged": [
+                                    null
+                                ]
+                            },
+                            "eventsSuspended": false,
+                            "tick": false,
+                            "eventsToDieOn": {
+                                "ready": true
+                            },
+                            "queue": [],
+                            "id": "anchor_30",
+                            "type": "TopCenter"
+                        }
+                    }
+                ]
+            ],
+            "anchors": [{
+                    "uuid": null,
+                    "x": 1,
+                    "y": 1,
+                    "orientation": [
+                        0,
+                        1
+                    ],
+                    "offset": [
+                        0,
+                        0
+                    ],
+                    "parameters": {},
+                    "type": "BottomRight"
+                },
+                {
+                    "uuid": null,
+                    "x": 0.5,
+                    "y": 0,
+                    "orientation": [
+                        0, -1
+                    ],
+                    "offset": [
+                        0,
+                        0
+                    ],
+                    "parameters": {},
+                    "type": "TopCenter"
+                }
+            ],
+            "labelText": null,
+            "overlays": []
+        },
+        {
+            "connectorType": "Flowchart",
+            "connectorAttr": {},
+            "connectionId": "con_32",
+            "sourceId": "initcall23d0b84e-9ba0-4a1c-8f81-eedfa8330b6a",
+            "targetId": "playaudio8ac0d688-523b-4132-bce7-5d5fa1087a6d",
+            "sourceEndpointUuid": null,
+            "targetEndpointUuid": null,
+            "paintStyle": {
+                "stroke-width": 4,
+                "stroke": "#456"
+            },
+            "endpointStyle": [{
+                    "stroke": "#111",
+                    "fill": "transparent",
+                    "radius": 10,
+                    "strokeWidth": 1
+                },
+                {
+                    "fill": "transparent",
+                    "radius": 0
+                }
+            ],
+            "hoverPaintStyle": null,
+            "endpoint": [
+                [
+                    "Rectangle",
+                    {
+                        "anchor": {
+                            "x": 0,
+                            "y": 1,
+                            "elementId": "initcall23d0b84e-9ba0-4a1c-8f81-eedfa8330b6a",
+                            "cssClass": "",
+                            "userDefinedLocation": null,
+                            "orientation": [
+                                0,
+                                1
+                            ],
+                            "lastReturnValue": [
+                                575,
+                                370,
+                                0,
+                                1
+                            ],
+                            "offsets": [
+                                0,
+                                0
+                            ],
+                            "timestamp": "1595109259191",
+                            "_listeners": {
+                                "anchorChanged": [
+                                    null
+                                ]
+                            },
+                            "eventsSuspended": false,
+                            "tick": false,
+                            "eventsToDieOn": {
+                                "ready": true
+                            },
+                            "queue": [],
+                            "id": "anchor_33",
+                            "type": "BottomLeft"
+                        }
+                    }
+                ],
+                [
+                    "Dot",
+                    {
+                        "anchor": {
+                            "x": 0.5,
+                            "y": 0,
+                            "elementId": "playaudio8ac0d688-523b-4132-bce7-5d5fa1087a6d",
+                            "cssClass": "",
+                            "userDefinedLocation": null,
+                            "orientation": [
+                                0, -1
+                            ],
+                            "lastReturnValue": [
+                                270.5,
+                                426,
+                                0.5,
+                                0
+                            ],
+                            "offsets": [
+                                0,
+                                0
+                            ],
+                            "timestamp": "1595109246086",
+                            "_listeners": {
+                                "anchorChanged": [
+                                    null
+                                ]
+                            },
+                            "eventsSuspended": false,
+                            "tick": false,
+                            "eventsToDieOn": {
+                                "ready": true
+                            },
+                            "queue": [],
+                            "id": "anchor_35",
+                            "type": "TopCenter"
+                        }
+                    }
+                ]
+            ],
+            "anchors": [{
+                    "uuid": null,
+                    "x": 0,
+                    "y": 1,
+                    "orientation": [
+                        0,
+                        1
+                    ],
+                    "offset": [
+                        0,
+                        0
+                    ],
+                    "parameters": {},
+                    "type": "BottomLeft"
+                },
+                {
+                    "uuid": null,
+                    "x": 0.5,
+                    "y": 0,
+                    "orientation": [
+                        0, -1
+                    ],
+                    "offset": [
+                        0,
+                        0
+                    ],
+                    "parameters": {},
+                    "type": "TopCenter"
+                }
+            ],
+            "labelText": null,
+            "overlays": []
+        }
+    ],
+    "blocks": [{
+            "id": "start",
+            "left": "20px",
+            "top": "20px",
+            "width": null,
+            "heigth": null,
+            "html": "  \n        <div class=\"start-call\">\n          <div class=\"start-call__header d-flex justify-content-between align-content-center\">\n            <div><i class=\"fa fa-circle\"></i> Start</div>\n          </div>\n          <div class=\"start-call__body\">\n            PHLO Execution will start from this node\n          </div>\n          <div class=\"start-call__footer d-flex justify-content-between\">\n            <div>Incoming SMS</div>\n            <div>Incoming Call</div>\n            <div>API Request</div>\n          </div>\n        </div>\n      ",
+            "options": {}
+        },
+        {
+            "id": "initcall23d0b84e-9ba0-4a1c-8f81-eedfa8330b6a",
+            "left": "575px",
+            "top": "226px",
+            "width": null,
+            "heigth": null,
+            "html": "\n              <div  class=\"init-call \">\n                <div class=\"init-call__header d-flex justify-content-between align-content-center\">\n                  <div><i class=\"fa fa-circle\"></i> Initiate Call </div>\n                  <a class=\"remove\" id=\"remove-initcall23d0b84e-9ba0-4a1c-8f81-eedfa8330b6a\"><i style=\"position: relative;top: 4px;\" class=\"fa fa-times-circle \"></i></a>\n                </div>\n                <div class=\"init-call__body\">  \n                    Initiate a call to a list of phone numbers or endpoints\n                </div>\n                <div class=\"init-call__footer d-flex justify-content-between\">\n                  <div>Answered</div>\n                  <div>Faild</div>\n                </div>\n                </div>\n              ",
+            "options": {
+                "callerID": "cdcdc",
+                "calleeID": "cdcdc"
+            }
+        },
+        {
+            "id": "playaudio8ac0d688-523b-4132-bce7-5d5fa1087a6d",
+            "left": "133px",
+            "top": "426px",
+            "width": null,
+            "heigth": null,
+            "html": "\n              <div class=\"play-audio \">\n                <div class=\"play-audio__header d-flex justify-content-between align-content-center\">\n                  <div><i class=\"fa fa-circle\"></i> Play Audio </div>\n                 <a class=\"remove\" id=\"remove-playaudio8ac0d688-523b-4132-bce7-5d5fa1087a6d\"> <i style=\"position: relative;top: 4px;\" class=\"fa fa-times-circle \"></i></a>\n                </div>\n                <div class=\"play-audio__body\">  \n                    Initiate a call to a list of phone numbers or endpoints\n                </div>\n              </div>\n              ",
+            "options": {
+                "soundName": "dcdcdcfvdfabg",
+                "soundURL": "bgdfzfg"
+            }
+        },
+        {
+            "id": "initcallaccb3993-a401-4bf6-ab11-af955db6813b",
+            "left": "573px",
+            "top": "466px",
+            "width": null,
+            "heigth": null,
+            "html": "\n              <div  class=\"init-call \">\n                <div class=\"init-call__header d-flex justify-content-between align-content-center\">\n                  <div><i class=\"fa fa-circle\"></i> Initiate Call </div>\n                  <a class=\"remove\" id=\"remove-initcallaccb3993-a401-4bf6-ab11-af955db6813b\"><i style=\"position: relative;top: 4px;\" class=\"fa fa-times-circle \"></i></a>\n                </div>\n                <div class=\"init-call__body\">  \n                    Initiate a call to a list of phone numbers or endpoints\n                </div>\n                <div class=\"init-call__footer d-flex justify-content-between\">\n                  <div>Answered</div>\n                  <div>Faild</div>\n                </div>\n                </div>\n              ",
+            "options": {
+                "callerID": "vvvvvvvvv",
+                "calleeID": "vvvvvvvvvvvvv"
+            }
+        },
+        {
+            "id": "playaudio4b76efea-ab21-41d2-9926-c1b1603b5292",
+            "left": "159px",
+            "top": "261px",
+            "width": null,
+            "heigth": null,
+            "html": "\n              <div class=\"play-audio \">\n                <div class=\"play-audio__header d-flex justify-content-between align-content-center\">\n                  <div><i class=\"fa fa-circle\"></i> Play Audio </div>\n                 <a class=\"remove\" id=\"remove-playaudio4b76efea-ab21-41d2-9926-c1b1603b5292\"> <i style=\"position: relative;top: 4px;\" class=\"fa fa-times-circle \"></i></a>\n                </div>\n                <div class=\"play-audio__body\">  \n                    Initiate a call to a list of phone numbers or endpoints\n                </div>\n              </div>\n              ",
+            "options": {
+                "soundName": "deded",
+                "soundURL": "deded"
+            }
+        }
+    ]
+}

@@ -9,7 +9,7 @@
       </button>
     </div>
     <div class="call-panel__form">
-      <form @submit="closePanel">
+      <form @submit.prevent="closePanel">
         <div class="form-group">
           <label for="calerID">Caller ID</label>
           <input type="text" v-model="callInfo.callerID" class="form-control" id="calerID">
@@ -19,7 +19,7 @@
           <label for="calleeID">Callee ID</label>
           <input type="text" v-model="callInfo.calleeID" class="form-control" id="calleeID">
         </div>
-        <button class="btn btn-info">Save</button>
+        <button class="btn btn-info" >Save</button>
       </form>
     </div>
   </div>
