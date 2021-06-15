@@ -4,18 +4,29 @@
       <div class="call-panel__header--title">
         <h5 v-bind="$attrs.nodeUUID">IVR Menu</h5>
       </div>
-      <button class="close-panel" @click="closePanel">
+      <button class="close-panel" @click="closePanelWithOutAction">
         <i class="fa fa-times"></i>
       </button>
     </div>
     <div class="call-panel__form">
       <form @submit.prevent="closePanel">
-        <div style="display:flex; flex-wrap: wrap;">
+        <div class="form-group">
+          <label for="nodeName">Node Name</label>
+          <input
+            type="text"
+            required
+            v-model="name"
+            class="form-control"
+            id="nodeName"
+          />
+        </div>
+        <p>Allowed Inputs</p>
+        <div style="display:flex; flex-wrap: wrap;width: 180px;">
           <div
-            style="flex: 0 0 33.333333%;text-align:center"
+            style="text-align:center"
             v-for="(num, i) in dialPad"
             :key="i"
-            class="dial"
+            class="dial ml-1"
           >
             <button
               :class="{ active: num.active }"
@@ -25,15 +36,23 @@
             </button>
           </div>
         </div>
-        <div class="form-group">
-          <label for="soundURL">Sound URL</label>
-          <input
-            type="text"
-            v-model="sound.soundURL"
-            class="form-control"
-            id="soundURL"
-          />
+        <!-- {num: 1 , audioID: dddd} -->
+        <div v-for="(action, i) in selectedNumbers" :key="i">
+          <div class="form-group">
+            <label>Click #{{ action.num }}</label>
+            <select
+              required
+              v-model="selectedNumbers[i].audioID"
+              class="form-control"
+            >
+              <option disabled value="">Select Audio Node Name</option>
+              <option v-for="(block, i) in blocks" :key="i" :value="block.id">{{
+                block.options.nodeName
+              }}</option>
+            </select>
+          </div>
         </div>
+
         <button class="btn btn-info">Save</button>
       </form>
     </div>
@@ -41,10 +60,11 @@
 </template>
 <script>
 export default {
-  props: ["nodeUUID", "soundName", "soundURL"],
+  props: ["nodeUUID", "blocks", "selectedNodes", "nodeName"],
   name: "ivr-options",
   data() {
     return {
+      name: "",
       dialPad: [
         { num: 1, active: false },
         { num: 2, active: false },
@@ -60,6 +80,7 @@ export default {
         { num: "*", active: false }
       ],
       isActive: false,
+      selectedNumbers: [],
       sound: {
         soundName: null,
         soundURL: null
@@ -67,16 +88,43 @@ export default {
     };
   },
   created() {
-    this.sound.soundName = this.soundName;
-    this.sound.soundURL = this.soundURL;
+    this.name = this.nodeName;
+    if (Array.isArray(this.selectedNodes) && this.selectedNodes.length) {
+      this.selectedNumbers = this.selectedNodes;
+      this.selectedNumbers.forEach(block => {
+        this.dialPad.forEach(num => {
+          if (block.num == num.num) {
+            num.active = true;
+          }
+        });
+      });
+    }
   },
   methods: {
     pushAction(num) {
-      this.isActive = !this.isActive;
-      console.log(num);
+      num.active = !num.active;
+      if (num.active) {
+        this.selectedNumbers.push({ num: num.num, audioID: "" });
+      } else {
+        let toDelete = this.selectedNumbers.find(block => {
+          return block.num === num.num;
+        });
+        this.selectedNumbers.splice(this.selectedNumbers.indexOf(toDelete), 1);
+      }
+    },
+    closePanelWithOutAction() {
+      this.$emit("closePanel");
     },
     closePanel() {
-      this.$emit("closePanel", this.sound);
+      if (!this.name) {
+        alert("Please fill all inputs");
+      } else {
+        this.$emit("closePanel", {
+          selectedNumbers: this.selectedNumbers,
+          dialStat: this.dialPad,
+          nodeName: this.name
+        });
+      }
     }
   }
 };

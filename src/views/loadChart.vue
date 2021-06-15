@@ -2,7 +2,7 @@
   <div class="glocom-main d-flex" id="work-container">
     <notifications group="foo" />
     <!-- <call-options ></call-options> -->
-    <slideout-panel></slideout-panel>
+    <slideout-panel :connectionDeleted="nDeleted"></slideout-panel>
     <aside class="glocom-main__aside">
       <div class="glocom-main__aside__content box-card">
         <div class="glocom-main__aside__content--search">
@@ -118,6 +118,7 @@ export default {
           radius: 10,
           strokeWidth: 1
         },
+        maxConnections: -1,
         dragOptions: {
           hoverClass: "hover",
           activeClass: "sourceActive"
@@ -144,7 +145,7 @@ export default {
           radius: 0
         },
         hoverPaintStyle: this.endpointHoverStyle,
-        maxConnections: 2,
+        maxConnections: -1,
         dropOptions: {
           hoverClass: "hover",
           activeClass: "active"
@@ -217,6 +218,25 @@ export default {
           uuid: targetUUID
         });
       }
+
+      var self = this;
+
+      jsPlumb.bind("beforeDetach", function(connInfo, originalEvent) {
+        let selectedBlock = self.blocks.find(block => {
+          return block.id === connInfo.sourceId;
+        });
+        let selectedOption = selectedBlock.options.selectedNumbers.find(
+          block => {
+            return block.audioID == connInfo.targetId;
+          }
+        );
+        console.log(connInfo.sourceId, "-->", connInfo.targetId);
+        selectedBlock.options.selectedNumbers.splice(
+          selectedBlock.options.selectedNumbers.indexOf(selectedOption),
+          1
+        );
+      });
+
       jsPlumb.bind("beforeDrop", function(connInfo, originalEvent) {
         String.prototype.includes = function(...args) {
           return (
@@ -287,17 +307,9 @@ export default {
       });
     },
     deleteBlock(id) {
-      // for (var i = 0; i < this.blocks.length; i++) {
-      //   var obj = this.blocks[i];
-      //   if (id.indexOf(obj.id) !== -1) {
-      //     this.blocks.splice(i, 1);
-      //     i--;
-      //   }
-      // }
       let toDelete = this.blocks.find(block => {
         return block.id === id;
       });
-
       this.blocks.splice(this.blocks.indexOf(toDelete), 1);
       jsPlumb.remove($("#" + id));
     },
@@ -315,13 +327,15 @@ export default {
         disableBgClick: true,
         props: {
           callerID: this.selectedBlock.options.callerID,
-          calleeID: this.selectedBlock.options.calleeID
+          calleeID: this.selectedBlock.options.calleeID,
+          nodeName: this.selectedBlock.options.nodeName
         }
       });
       panel.promise.then(result => {
         this.selectedBlock.options = {
           callerID: result.callerID,
-          calleeID: result.calleeID
+          calleeID: result.calleeID,
+          nodeName: result.nodeName
         };
       });
     },
@@ -339,38 +353,70 @@ export default {
         disableBgClick: true,
         props: {
           soundName: this.selectedBlock.options.soundName,
-          soundURL: this.selectedBlock.options.soundURL
+          soundURL: this.selectedBlock.options.soundURL,
+          nodeName: this.selectedBlock.options.nodeName
         }
       });
       panel.promise.then(result => {
         this.selectedBlock.options = {
           soundName: result.soundName,
-          soundURL: result.soundURL
+          soundURL: result.soundURL,
+          nodeName: result.nodeName
         };
       });
+    },
+    nDeleted(value) {
+      console.log(
+        "🚀 ~ file: loadChart.vue ~ line 369 ~ connectionDeleted ~ value",
+        value
+      );
     },
     showIVRPanel(id) {
       this.selectedBlock = this.blocks.find(block => {
         return block.id === id;
       });
+      var filteredArray = this.blocks.filter(function(block) {
+        return (
+          block.id.includes("playaudio") ||
+          block.id.includes("ivr") ||
+          block.id.includes("initcall")
+        );
+      });
+      filteredArray.splice(filteredArray.indexOf(this.selectedBlock), 1);
       const panel = this.$showPanel({
         component: "ivr-options",
         cssClass: "ivrOptions",
         openOn: "right",
         width: "400",
         sync: true,
-        keepAlive: false,
+        keepAlive: true,
         disableBgClick: true,
         props: {
-          soundName: this.selectedBlock.options.soundName,
-          soundURL: this.selectedBlock.options.soundURL
+          blocks: filteredArray,
+          selectedNodes: this.selectedBlock.options.selectedNumbers,
+          nodeName: this.selectedBlock.options.nodeName
         }
       });
       panel.promise.then(result => {
         this.selectedBlock.options = {
-          soundName: result.soundName,
-          soundURL: result.soundURL
+          selectedNumbers: result.selectedNumbers,
+          nodeName: result.nodeName
         };
+        result.selectedNumbers.forEach(node => {
+          var arr = jsPlumb.select({
+            source: this.selectedBlock.id,
+            target: node.audioID
+          });
+          if (arr.length == 0) {
+            jsPlumb.connect({
+              uuids: [
+                `${this.selectedBlock.id}BottomCenter`,
+                `${node.audioID}TopCenter`
+              ]
+            });
+            console.log("arr after", arr);
+          }
+        });
       });
     },
     reAddEndpoints(id) {
@@ -398,11 +444,17 @@ export default {
       if (type === "call") {
         this.options = {
           callerID: null,
-          calleeID: null
+          calleeID: null,
+          nodeName: null
         };
       } else if (type === "audio") {
         this.options = {
           sound: null
+        };
+      } else if (type === "ivr") {
+        this.options = {
+          selectedNumbers: [],
+          nodeName: null
         };
       }
 
@@ -449,7 +501,11 @@ export default {
                 "?"
             )
           )
-            jsPlumb.deleteConnection(conn);
+            console.log(
+              "🚀 ~ file: loadChart.vue ~ line 475 ~ jsPlumb.bind ~ conn",
+              conn
+            );
+          jsPlumb.deleteConnection(conn);
           conn.toggleType("basic");
         });
         $(document).on("click", ".remove", function(e) {
@@ -530,6 +586,7 @@ export default {
               $("#" + id).dblclick(function() {
                 self.showCallPanel(id);
               });
+              $("#" + id).trigger("dblclick");
             });
           }
           // Play Audio
@@ -552,6 +609,7 @@ export default {
             this.top = top;
             this.left = left;
             self.addBlock(html, id, top, left, "audio");
+
             self.$nextTick(function() {
               self.addEndpoints(id, [], ["TopCenter"]);
               jsPlumb.draggable(id, {
@@ -560,6 +618,7 @@ export default {
               $("#" + id).dblclick(function() {
                 self.showAudioPanel(id);
               });
+              $("#" + id).trigger("dblclick");
             });
           }
           if (ui.draggable[0].id == "ivr") {
@@ -582,13 +641,14 @@ export default {
             this.left = left;
             self.addBlock(html, id, top, left, "ivr");
             self.$nextTick(function() {
-              self.addEndpoints(id, [], ["TopCenter"]);
+              self.addEndpoints(id, ["BottomCenter"], ["TopCenter"]);
               jsPlumb.draggable(id, {
                 grid: [1, 1]
               });
               $("#" + id).dblclick(function() {
                 self.showIVRPanel(id);
               });
+              $("#" + id).trigger("dblclick");
             });
           }
         }
