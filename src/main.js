@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-
+import store from '@/store'
 // axios
 import axios from 'axios'
 Vue.prototype.$axios = axios;
@@ -25,9 +25,9 @@ import '@hyjiacan/vue-slideout/lib/slideout.css'
 
 // import SlideOut component, and set the defaults props
 Vue.use(SlideOut, {
-  // set props here
-})  
-// html2canvas
+        // set props here
+    })
+    // html2canvas
 import html2canvas from 'html2canvas';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -44,8 +44,9 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
+    el: '#app',
+    router,
+    store,
+    components: { App },
+    template: '<App/>'
 })

@@ -60,7 +60,7 @@
 </template>
 <script>
 export default {
-  props: ["nodeUUID", "blocks", "selectedNodes", "nodeName"],
+  props: ["nodeUUID", "blocks", "selectedNodes", "nodeName", "currentBlock"],
   name: "ivr-options",
   data() {
     return {
@@ -108,6 +108,10 @@ export default {
       } else {
         let toDelete = this.selectedNumbers.find(block => {
           return block.num === num.num;
+        });
+        this.$store.commit("setCurrentNode", {
+          ...toDelete,
+          currentBlockID: this.currentBlock.id
         });
         this.selectedNumbers.splice(this.selectedNumbers.indexOf(toDelete), 1);
       }

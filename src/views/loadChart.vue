@@ -2,7 +2,7 @@
   <div class="glocom-main d-flex" id="work-container">
     <notifications group="foo" />
     <!-- <call-options ></call-options> -->
-    <slideout-panel :connectionDeleted="nDeleted"></slideout-panel>
+    <slideout-panel></slideout-panel>
     <aside class="glocom-main__aside">
       <div class="glocom-main__aside__content box-card">
         <div class="glocom-main__aside__content--search">
@@ -71,6 +71,7 @@ import Notifications from "vue-notification";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 Vue.use(VueSweetalert2);
+import { mapGetters } from "vuex";
 import initCallOptions from "@/components/initCallOptions";
 Vue.component("call-options", initCallOptions);
 import audioOptions from "@/components/audioOptions";
@@ -170,6 +171,22 @@ export default {
   // components: {
   //   initCallOptions
   // },
+  computed: {
+    ...mapGetters(["currentNode"])
+  },
+  watch: {
+    currentNode(val) {
+      if (val.audioID && val.currentBlockID) {
+        var conn = jsPlumb.getConnections({
+          source: val.currentBlockID,
+          target: val.audioID
+        });
+        if (conn[0]) {
+          jsPlumb.deleteConnection(conn[0]);
+        }
+      }
+    }
+  },
   methods: {
     addStart() {
       let html = `
@@ -218,9 +235,7 @@ export default {
           uuid: targetUUID
         });
       }
-
       var self = this;
-
       jsPlumb.bind("beforeDetach", function(connInfo, originalEvent) {
         let selectedBlock = self.blocks.find(block => {
           return block.id === connInfo.sourceId;
@@ -230,24 +245,19 @@ export default {
             return block.audioID == connInfo.targetId;
           }
         );
-        console.log(connInfo.sourceId, "-->", connInfo.targetId);
-        selectedBlock.options.selectedNumbers.splice(
-          selectedBlock.options.selectedNumbers.indexOf(selectedOption),
-          1
-        );
+        if (selectedOption) {
+          selectedBlock.options.selectedNumbers.splice(
+            selectedBlock.options.selectedNumbers.indexOf(selectedOption),
+            1
+          );
+        }
       });
-
       jsPlumb.bind("beforeDrop", function(connInfo, originalEvent) {
         String.prototype.includes = function(...args) {
           return (
             args.filter(str => this.indexOf(str) > -1).length === args.length
           );
         };
-        console.log(
-          connInfo.connection.endpoints[0].getUuid() +
-            " --> " +
-            connInfo.dropEndpoint.getUuid()
-        );
         if (
           connInfo.connection.endpoints[0].getUuid().includes("start") &&
           connInfo.dropEndpoint.getUuid().includes("playaudio")
@@ -291,6 +301,13 @@ export default {
           Vue.notify({
             group: "foo",
             text: "Oops, something went wrong!",
+            type: "error"
+          });
+          jsPlumb.deleteConnection(connInfo.connection);
+        } else if (connInfo.connection.endpoints[0].getUuid().includes("ivr")) {
+          Vue.notify({
+            group: "foo",
+            text: "Please connect nodes to IVR from Side Panel",
             type: "error"
           });
           jsPlumb.deleteConnection(connInfo.connection);
@@ -365,12 +382,6 @@ export default {
         };
       });
     },
-    nDeleted(value) {
-      console.log(
-        "🚀 ~ file: loadChart.vue ~ line 369 ~ connectionDeleted ~ value",
-        value
-      );
-    },
     showIVRPanel(id) {
       this.selectedBlock = this.blocks.find(block => {
         return block.id === id;
@@ -394,7 +405,8 @@ export default {
         props: {
           blocks: filteredArray,
           selectedNodes: this.selectedBlock.options.selectedNumbers,
-          nodeName: this.selectedBlock.options.nodeName
+          nodeName: this.selectedBlock.options.nodeName,
+          currentBlock: this.selectedBlock
         }
       });
       panel.promise.then(result => {
@@ -414,7 +426,6 @@ export default {
                 `${node.audioID}TopCenter`
               ]
             });
-            console.log("arr after", arr);
           }
         });
       });
@@ -457,11 +468,9 @@ export default {
           nodeName: null
         };
       }
-
       if (options) {
         this.options = options;
       }
-
       this.blocks.push({
         id: id,
         left: left,
@@ -501,11 +510,7 @@ export default {
                 "?"
             )
           )
-            console.log(
-              "🚀 ~ file: loadChart.vue ~ line 475 ~ jsPlumb.bind ~ conn",
-              conn
-            );
-          jsPlumb.deleteConnection(conn);
+            jsPlumb.deleteConnection(conn);
           conn.toggleType("basic");
         });
         $(document).on("click", ".remove", function(e) {
@@ -547,7 +552,6 @@ export default {
         helper: "clone",
         containment: $("#work-container")
       });
-
       $("#workplace").droppable({
         scope: "plant",
         drop: function(ev, ui) {
@@ -609,7 +613,6 @@ export default {
             this.top = top;
             this.left = left;
             self.addBlock(html, id, top, left, "audio");
-
             self.$nextTick(function() {
               self.addEndpoints(id, [], ["TopCenter"]);
               jsPlumb.draggable(id, {
@@ -666,10 +669,8 @@ export default {
             // for (var i = 0 ; i < blocks.length; i++) {
             blocks.forEach(function(o) {
               self.addBlock(o.html, o.id, o.top, o.left, o.type, o.options);
-              // console.log(o.options.callerID);
               self.$nextTick(function() {
                 if (o.id.includes("initcall")) {
-                  console.log("this is call");
                   $("#" + o.id).dblclick(function() {
                     self.showCallPanel(o.id);
                   });
@@ -752,7 +753,6 @@ export default {
             plumbInstance = plumbInstance || jsPlumb;
             var connection;
             connection = jsPlumb.getAllConnections();
-            console.log(self.blocks);
             var connections = [];
             $.each(jsPlumb.getAllConnections(), function(idx, connection) {
               var id = connection.sourceId;
@@ -786,7 +786,6 @@ export default {
                   options.anchor = endpoint.anchor;
                   endpointArray.push([endpoint.type, options]);
                 }
-                console.log(options);
               });
               connections.push({
                 // path: connector.getPath(),
