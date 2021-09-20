@@ -442,6 +442,9 @@ export default {
         if (block.id.includes("playaudio")) {
           this.addEndpoints(block.id, [], ["TopCenter"]);
         }
+        if (block.id.includes("ivr")) {
+          this.addEndpoints(block.id, ["BottomCenter"], ["TopCenter"]);
+        }
         if (block.id === "start") {
           this.addEndpoints(
             block.id,
@@ -548,6 +551,11 @@ export default {
         containment: $("#work-container")
       });
       $(".playAudio").draggable({
+        scope: "plant",
+        helper: "clone",
+        containment: $("#work-container")
+      });
+      $(".ivr").draggable({
         scope: "plant",
         helper: "clone",
         containment: $("#work-container")
@@ -685,6 +693,12 @@ export default {
                     self.showAudioPanel(o.id);
                   });
                   self.addEndpoints(o.id, [], ["TopCenter"]);
+                }
+                if (o.id.includes("ivr")) {
+                  $("#" + o.id).dblclick(function() {
+                    self.showIVRPanel(o.id);
+                  });
+                  self.addEndpoints(o.id, ["BottomCenter"], ["TopCenter"]);
                 }
                 if (o.id === "start") {
                   self.addEndpoints(
